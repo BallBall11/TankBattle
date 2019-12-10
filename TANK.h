@@ -2,7 +2,12 @@
 #ifndef TANK_INCLUDED
 #define TANK_INCLUDED
 
-#define MAX_TANK 1
+#include"basic_define.h"
+#include<easyx.h>
+#include<graphics.h>
+#include<conio.h>
+
+#define MAX_TANK 2
 
 #define WEAPON 0
 
@@ -17,8 +22,6 @@
 #define HE_BIG 1
 #define BIG_HEALING_BLOOD 2
 
-#include "FLY.h"
-
 enum Direction_Cannot_Go {
 	NONE = -1,
 	UP, DOWN, LEFT, RIGHT,
@@ -30,7 +33,7 @@ enum Direction_Cannot_Go {
 class TANK
 {
 private:
-	char	shape;
+	IMAGE	picture;			//坦克的贴图
 	int		id;					//坦克的ID
 	int		x;					//坦克的x坐标(像素坐标)
 	int		y;					//坦克的y坐标(像素坐标)
@@ -40,17 +43,25 @@ private:
 	int		weapon_id;			//坦克的武器ID
 	int		blood;				//坦克的血量
 	int		speed = 1;			//坦克的速度
+	int		cold_time = 0;		//武器冷却时间，为零可以攻击
 	int		cannot_go;			//坦克哪个方向不能走
-	bool	CanStand(int x, int y);
 public:
-	int		Setup(int Iid, int Ix, int Iy, int Ifacing);
+	TANK(
+		int Iid,
+		int Ix,
+		int Iy,
+		int Ifacing);
+	TANK();
+	bool	CanStand(int x, int y);
 	void	Turning(int position);
 	bool	Hurt(int hurt);
 	void	Move();
 	int		Speed() { return speed; }
 	bool	CanMove();
-	void 	Show();
+	void 	Paint();
 	void    TankClear();
+	void	Shoot();
+	bool	CanShoot();
 	int		Getx();
 	int		Gety();
 	int		GetxEnd();
@@ -58,5 +69,37 @@ public:
 	void	ChangeWeapon(int new_weapon_id);
 	void	ChangeCannotGo(int new_cannot_go);
 };
+
+struct TANK_TYPE
+{
+	IMAGE	picture;			//坦克贴图
+	int		size_x;				//坦克的x大小
+	int		size_y;				//坦克的y大小
+	int		blood;				//坦克的血量
+	int		speed;				//坦克的速度
+	TANK_TYPE(
+		LPCTSTR	Lpictrue,
+		int		Isize_x,
+		int		Isize_y,
+		int		Iblood,
+		int		Ispeed
+	)
+	{
+		loadimage(&picture, Lpictrue);
+		size_x = Isize_x;
+		size_y = Isize_y;
+		blood = Iblood;
+		speed = Ispeed;
+	}
+	TANK_TYPE()
+	{
+		picture = NULL;
+		size_x = 0;
+		size_y = 0;
+		blood = 0;
+		speed = 0;
+	}
+};
+
 
 #endif
