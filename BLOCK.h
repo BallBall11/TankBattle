@@ -46,6 +46,7 @@ public:
 	int		GetxEnd(int x);
 	int		GetyEnd(int y);
 	void	BlockClear(int x, int y);
+
 	BLOCK(
 		LPCTSTR	Lway,
 		int		Iid,
@@ -57,9 +58,33 @@ public:
 		bool	Bis_explosive,
 		bool	Bis_passable,
 		bool	Bis_cover
-	);
-	BLOCK() {}
-	
+	)
+	{
+		loadimage(&picture, Lway);
+		id = Iid;
+		size_x = Isize_x;
+		size_y = Isize_y;
+		explosion_radium = Iexplosion_radium;
+		explosion_forces = Iexplosion_forces;
+		next_block_number = Inext_block_number;
+		is_explosive = Bis_explosive;
+		is_passable = Bis_passable;
+		is_cover = Bis_cover;
+	}
+
+	BLOCK()
+	{
+		picture = NULL;
+		id = -1;
+		size_x = 0;
+		size_y = 0;
+		explosion_radium = -1;
+		explosion_forces = -1;
+		next_block_number = -1;
+		is_explosive = false;
+		is_passable = false;
+		is_cover = false;
+	}
 };
 
 #endif

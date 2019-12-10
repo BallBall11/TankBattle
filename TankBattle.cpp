@@ -26,7 +26,7 @@ static struct DATA
 }data;
 
 void Print();
-bool DataChange(TANK* a);
+bool DataChange(list<class TANK>::iterator a);
 void Init();
 void GenerateRandomMap();
 void Begin();
@@ -36,15 +36,16 @@ void PaintBackground(int i, int j);
 
 int main()
 {
-	//DWORD mytime = 0;
 	srand((unsigned int)time(NULL));
 	initgraph((WIN_COL + 20) * BLOCK_SIZE, WIN_ROW * BLOCK_SIZE);
 	Init();
 	_getch();
 	Begin();
-	TANK me;
-	me.Setup(0, MAX_MAP / 2, MAX_MAP - 2, UP);
+	//TANK me;
+	//me = TANK(0, (MAX_MAP / 2-1)*BLOCK_SIZE, (MAX_MAP - 3)*BLOCK_SIZE, UP);
+	
 	bool flash;
+	
 	while (1)
 	{
 		if (GetKeyState(VK_F2) < 0)
@@ -52,11 +53,12 @@ int main()
 			cleardevice();
 			clearcliprgn();
 			outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("暂停"));
-			
+			starttime = GetTickCount();
 			while (1)
 			{
 				if (GetKeyState(VK_F2) > 0)
 				{
+					starttime = GetTickCount();
 					cleardevice();
 					setlinecolor(RED);
 					line((WIN_COL * 2 + 1) * BLOCK_SIZE / 2, 0, (WIN_COL * 2 + 1) * BLOCK_SIZE / 2, WIN_ROW * BLOCK_SIZE);
@@ -72,13 +74,13 @@ int main()
 				}
 			}
 		}
-		starttime = GetTickCount();
+		
 		static DWORD mytime = GetTickCount();
 		if (mytime - starttime < 1000 / FPS) //帧率控制  20FPS
 		{
 			Sleep(1000 / FPS - (mytime - starttime));
 		}
-		flash = DataChange(&me);
+		flash = DataChange(list_tank.begin());
 		if (flash)
 			Print();
 		//moveshoot(&start, &dat);
@@ -99,8 +101,6 @@ int main()
 
 void Init()
 {
-	//IMAGE test_picture;
-	//loadimage(&test_picture, _T("resources\\block\\墙1.bmp"));
 	LoadResources();
 	setfillcolor(BLACK);
 	TCHAR s1[] = _T("坦克大战");
@@ -109,50 +109,30 @@ void Init()
 	settextstyle(BLOCK_SIZE, 0, _T("宋体"));
 	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, s1);
 	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3 + 2) * BLOCK_SIZE, s2);
-
-	//putimage(0, 0, &test_picture);
 }
 
 void Begin()
 {
 	GenerateRandomMap();
-	//system("cls");
 	cleardevice();
-	scr_y = (MAX_MAP - 2) * BLOCK_SIZE + BLOCK_SIZE / 2;
-	scr_x = (MAX_MAP / 2) * BLOCK_SIZE + BLOCK_SIZE / 2;
-	//for (int i = 1; i < WIN_ROW ; i++)//界面搭建
-	//{
-	//	Gotoxy( WIN_COL, i);
-	//	printf("|");
-	//}
+
 	setlinecolor(RED);
 	line((WIN_COL * 2 + 1) * BLOCK_SIZE / 2, 0, (WIN_COL * 2 + 1) * BLOCK_SIZE / 2, WIN_ROW * BLOCK_SIZE);
 	setlinecolor(BLACK);
-	/*Gotoxy(WIN_COL + 1, WIN_ROW / 4 - 2); printf("游戏状态：");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4); printf("开始！");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 3); printf("操作方法：");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 6); printf("方向键操作坦克");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 7); printf("空格开火");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 8); printf("@是你的坦克");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 9); printf("%%是墙体，你不能穿过，但可以破坏");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 10); printf("#是基岩，你不能穿过，且不能破坏");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 11); printf("T是TNT方块，破坏时会爆炸");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 12); printf("&是掩体，你可以穿过，且会被隐藏");
-	Gotoxy(WIN_COL + 1, WIN_ROW / 4 + 13); printf("F2暂停");*/
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 - 2) * BLOCK_SIZE, _T("游戏状态："));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4) * BLOCK_SIZE, _T("开始！"));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 3) * BLOCK_SIZE, _T("操作方法："));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 4) * BLOCK_SIZE, _T("方向键操作坦克"));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 5) * BLOCK_SIZE, _T("空格开火"));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 6) * BLOCK_SIZE, _T("F2暂停"));
-	//Resize(&show.before, WIN_COL * BLOCK_SIZE, WIN_ROW * BLOCK_SIZE);
-	//Resize(&show.now, WIN_COL * BLOCK_SIZE, WIN_ROW * BLOCK_SIZE);
-	
 
+	list_tank.push_back(TANK(0, (MAX_MAP / 2 - 1) * BLOCK_SIZE, (MAX_MAP - 4) * BLOCK_SIZE, UP));
+	scr_y = (MAX_MAP - 3) * BLOCK_SIZE + BLOCK_SIZE / 2;
+	scr_x = (MAX_MAP / 2 ) * BLOCK_SIZE + BLOCK_SIZE / 2;
 	Print();
 }
 
-bool DataChange(TANK * me)
+bool DataChange(list<class TANK>::iterator me)
 {
 	bool ans = 0;
 	if (GetAsyncKeyState(VK_UP)   ) 
@@ -161,7 +141,7 @@ bool DataChange(TANK * me)
 		//if (me->CanMove())
 		{
 			me -> Move();
-			scr_y -= me->Speed();
+			scr_y = me->Gety() + BLOCK_SIZE * 3 / 2;
 		}
 		ans = 1; 
 	}
@@ -171,7 +151,7 @@ bool DataChange(TANK * me)
 		//if (me->CanMove())
 		{
 			me->Move();
-			scr_x -= me->Speed();
+			scr_x =me->Getx() + BLOCK_SIZE * 3 / 2;
 		}
 		ans = 1;
 	}
@@ -181,7 +161,7 @@ bool DataChange(TANK * me)
 		//if (me->CanMove())
 		{
 			me->Move();
-			scr_y += me->Speed();
+			scr_y = me->Gety() + BLOCK_SIZE * 3 / 2;
 		}
 		ans = 1;
 	}
@@ -191,11 +171,18 @@ bool DataChange(TANK * me)
 		//if (me->CanMove())
 		{
 			me->Move();
-			scr_x += me->Speed();
+			scr_x = me->Getx() + BLOCK_SIZE * 3 / 2;
 		}
 		ans = 1;
 	}
-	return ans;
+	if (GetAsyncKeyState(VK_SPACE))
+	{
+		me->Shoot();
+		ans = 1;
+	}
+	for (list<class FLY>::iterator it = list_fly.begin(); it != list_fly.end(); it++)
+		it->Move();
+	return 1;
 }
 
 void Print()
@@ -218,6 +205,10 @@ void Print()
 			if (IsInMap(i, j))
 				map[i][j].block->Paint(i, j);
 			else PaintBackground(i,j);
+	for(list<class TANK>::iterator it=list_tank.begin();it!=list_tank.end();it++)
+	    it->Paint();
+	for (list<class FLY>::iterator it = list_fly.begin(); it != list_fly.end(); it++)
+		it->Paint();
 	EndBatchDraw();
 	setcliprgn(NULL);
 }
@@ -239,25 +230,25 @@ void GenerateRandomMap()
 			int a = rand() % 40, b = 0;
 			switch (a)
 			{
-			case 8:
-			case 9:
-				b = 1; break;
-			case 10:
-			case 11:
-				b = 2; break;
-			case 12:
-			case 13:
-				b = 3; break;
-			case 14:
-				b = 4; break;
-			case 15:b = 5; break;
-			case 16:
-				b = 6; break;
-			case 17:
-			case 18:
-				b = 7; break;
-			case 19:
-				b = 8; break;
+			//case 8:
+			//case 9:
+			//	b = 1; break;
+			//case 10:
+			//case 11:
+			//	b = 2; break;
+			//case 12:
+			//case 13:
+			//	b = 3; break;
+			//case 14:
+			//	b = 4; break;
+			//case 15:b = 5; break;
+			//case 16:
+			//	b = 6; break;
+			//case 17:
+			//case 18:
+			//	b = 7; break;
+			//case 19:
+			//	b = 8; break;
 			default:
 				b = 0;
 			}
