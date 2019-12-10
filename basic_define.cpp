@@ -1,18 +1,27 @@
 #include "basic_define.h"
-#include"BLOCK.h"
 #include <cstdio>
 #include <cstdlib>
-#include<graphics.h>
-#include<easyx.h>
+#include <easyx.h>
 
-extern BLOCK block_type[MAX_BLOCK];
+extern BLOCK		block_type[MAX_BLOCK];
+extern TANK_TYPE	tank_type[MAX_TANK];
+extern FLY_TYPE		fly_type[MAX_FLY];
+
+extern std::list<TANK>		list_tank;
+extern std::list<ENTITY>	list_entity;
+extern std::list<FLY>		list_fly;
+
 DWORD starttime;
 DWORD START;
+
 DIRECTION dir[4] = { {-1,0},{1,0},{0,-1},{0,1} };
+
 CELL map[MAX_MAP][MAX_MAP];
+
 extern int scr_x, scr_y;
 
 int	ChangeToScreen(int x) { return x / BLOCK_SIZE; }
+int ChangeToPixel(int x) { return x * BLOCK_SIZE; }
 
 void End() {
 	cleardevice();
@@ -53,18 +62,35 @@ int ScreenY(int y)
 	return y * BLOCK_SIZE - scr_y + WIN_ROW * BLOCK_SIZE/2;
 }
 
+int ScreenXPixel(int x)
+{
+	return x - scr_x + WIN_COL * BLOCK_SIZE / 2;
+}
+
+int ScreenYPixel(int y)
+{
+	return y - scr_y + WIN_ROW * BLOCK_SIZE / 2;
+}
+
+
 void LoadResources()
 {
-	block_type[0] = BLOCK(_T("resources\\block\\路.bmp"), B_SPACE, 1, 1, 0, 0, 0, false, true, false);
-	block_type[1] = BLOCK(_T("resources\\block\\墙1.bmp"), B_ONE, 1, 1, 0, 0, 0, false, false, false);
-	block_type[2] = BLOCK(_T("resources\\block\\墙2.bmp"), B_TWO, 1, 1, 0, 0, 1, false, false, false);
-	block_type[3] = BLOCK(_T("resources\\block\\墙3.bmp"), B_THREE, 1, 1, 0, 0, 2, false, false, false);
-	block_type[4] = BLOCK(_T("resources\\block\\墙4.bmp"), B_FOUR, 1, 1, 0, 0, 3, false, false, false);
-	block_type[5] = BLOCK(_T("resources\\block\\墙5.bmp"), B_FIVE, 1, 1, 0, 0, 4, false, false, false);
-	block_type[6] = BLOCK(_T("resources\\block\\TNT.bmp"), B_TNT, 1, 1, 3, 5, 0, true, false, false);
-	block_type[7] = BLOCK(_T("resources\\block\\基岩.bmp"), B_BEDROCK, 1, 1, 0, 0, 7, false, false, false);
-	block_type[8] = BLOCK(_T("resources\\block\\掩体.bmp"), B_SHIELD, 1, 1, 0, 0, 0, false, true, true);
-	block_type[9] = BLOCK(_T("resources\\block\\基地.bmp"), B_BASEMENT, 1, 1, 0, 0, 0, false, false, false);
+	block_type[0] = BLOCK(_T("resources\\block\\路.gif"),	B_SPACE,	1, 1, 0, 0, 0, false, true , false);
+	block_type[1] = BLOCK(_T("resources\\block\\墙1.gif"),	B_ONE,		1, 1, 0, 0, 0, false, false, false);
+	block_type[2] = BLOCK(_T("resources\\block\\墙2.gif"),	B_TWO,		1, 1, 0, 0, 1, false, false, false);
+	block_type[3] = BLOCK(_T("resources\\block\\墙3.gif"),	B_THREE,	1, 1, 0, 0, 2, false, false, false);
+	block_type[4] = BLOCK(_T("resources\\block\\墙4.gif"),	B_FOUR,		1, 1, 0, 0, 3, false, false, false);
+	block_type[5] = BLOCK(_T("resources\\block\\墙5.gif"),	B_FIVE,		1, 1, 0, 0, 4, false, false, false);
+	block_type[6] = BLOCK(_T("resources\\block\\TNT.gif"),	B_TNT,		1, 1, 3, 5, 0, true , false, false);
+	block_type[7] = BLOCK(_T("resources\\block\\基岩.gif"), B_BEDROCK,	1, 1, 0, 0, 7, false, false, false);
+	block_type[8] = BLOCK(_T("resources\\block\\掩体.gif"), B_SHIELD,	1, 1, 0, 0, 0, false, true , true );
+	block_type[9] = BLOCK(_T("resources\\block\\基地.gif"), B_BASEMENT, 1, 1, 0, 0, 0, false, false, false);
+	////////////////
+	tank_type[0] = TANK_TYPE(_T("resources\\tank\\坦克1.gif"), 3, 3, 1, 1);
+	////////////////
+	fly_type[0] = FLY_TYPE(_T("resources\\fly\\普通.gif"), 1, 1, 3, 0);
+	fly_type[1] = FLY_TYPE(_T("resources\\fly\\爆破.gif"), 1, 1, 2, 1);
+	fly_type[2] = FLY_TYPE(_T("resources\\fly\\激光.gif"), 1, 1, -1, 0);	//-1表示瞬时
 }
 
 void Lose() {

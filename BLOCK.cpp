@@ -3,18 +3,6 @@
 #include "basic_define.h"
 
 BLOCK block_type[MAX_BLOCK];
-//{
-//	{_T("resources\\block\\Â·.png"),	B_SPACE		, 1, 1, 0, 0, 0, false, true , false },
-//	{_T("resources\\block\\Ç½1.png"),	B_ONE		, 1, 1, 0, 0, 0, false, false, false },
-//	{_T("resources\\block\\Ç½2.png"),	B_TWO		, 1, 1, 0, 0, 1, false, false, false },
-//	{_T("resources\\block\\Ç½3.png"),	B_THREE		, 1, 1, 0, 0, 2, false, false, false },
-//	{_T("resources\\block\\Ç½4.png"),	B_FOUR		, 1, 1, 0, 0, 3, false, false, false },
-//	{_T("resources\\block\\Ç½5.png"),	B_FIVE		, 1, 1, 0, 0, 4, false, false, false },
-//	{_T("resources\\block\\TNT.png"),	B_TNT		, 1, 1, 3, 5, 0, true , false, false },
-//	{_T("resources\\block\\»ùÑÒ.png"),	B_BEDROCK	, 1, 1, 0, 0, 7, false, false, false },
-//	{_T("resources\\block\\ÑÚÌå.png"),	B_SHIELD	, 1, 1, 0, 0, 0, false, true , true  },
-//	{_T("resources\\block\\Â·.png"),	B_BASEMENT	, 1, 1, 0, 0, 0, false, false, false }
-//};
 
 //BLOCK* map[MAX_MAP][MAX_MAP];
 
@@ -54,35 +42,6 @@ bool BLOCK::IsExplosive() { return is_explosive; }
 bool BLOCK::IsPassable() { return is_passable; }
 
 void BLOCK::Paint(int x, int y) { if(&picture!=NULL)putimage(ScreenX(x), ScreenY(y), &picture); }
-
-BLOCK* FindBlock(int index)
-{
-	return &block_type[index & ~MASK_BLOCK];
-}
-BLOCK::BLOCK(
-	LPCTSTR	Lway,
-	int		Iid,
-	int		Isize_x,
-	int		Isize_y,
-	int		Iexplosion_radium,
-	int		Iexplosion_forces,
-	int		Inext_block_number,
-	bool	Bis_explosive,
-	bool	Bis_passable,
-	bool	Bis_cover
-)
-{
-	loadimage(&picture, Lway);
-	id = Iid;
-	size_x = Isize_x;
-	size_y = Isize_y;
-	explosion_radium = Iexplosion_radium;
-	explosion_forces = Iexplosion_forces;
-	next_block_number = Inext_block_number;
-	is_explosive = Bis_explosive;
-	is_passable = Bis_passable;
-	is_cover = Bis_cover;
-}
 
 void BLOCK::BlockClear(int x, int y) {
 	clearrectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, (x + size_x) * BLOCK_SIZE,
