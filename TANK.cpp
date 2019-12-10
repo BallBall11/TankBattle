@@ -1,9 +1,9 @@
 #include "TANK.h"
 
-extern BLOCK* FindBlock(int index);
-
 TANK_TYPE tank_type[MAX_TANK];
 extern FLY_TYPE fly_type[MAX_FLY];
+extern std::list<class TANK> list_tank_null;
+
 
 TANK::TANK(int Iid, int Ix, int Iy, int Ifacing)
 {
@@ -35,9 +35,11 @@ bool TANK::Hurt(int hurt)
 
 void TANK::Move()
 {
-	/*x += dir[facing].x * speed;
-	y += dir[facing].y * speed;*/
-	for (int i = 0; i < speed; i++)		//我还是坚持我自己的Move函数
+	std::list<class TANK>::iterator tank_iterator;
+	tank_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].tank;
+	ClearIterator();
+
+	for (int i = 0; i < speed; i++)		//鎴戣繕鏄潥鎸佹垜鑷繁鐨凪ove鍑芥暟
 	{
 		int xx = x + dir[facing].x;
 		int yy = y + dir[facing].y;
@@ -45,6 +47,9 @@ void TANK::Move()
 		x = xx;
 		y = yy;
 	}
+
+	SetIterator(tank_iterator);
+
 }
 
 void TANK::Paint()
@@ -96,7 +101,7 @@ void TANK::TankClear()
 
 void TANK::Shoot()
 {
-	int fly_x, fly_y;
+    int fly_x = -1, fly_y = -1;
 	int fly_size_x = fly_type[weapon_id].size_x;
 	int fly_size_y = fly_type[weapon_id].size_y;
 	switch (facing)
@@ -125,7 +130,29 @@ bool TANK::CanShoot() { return !cold_time; }
 
 int TANK::Getx() { return x; }
 int TANK::Gety() { return y; }
-int TANK::GetxEnd() { return x + size_x; }
-int TANK::GetyEnd() { return y + size_y; }
+int TANK::GetxEnd() { return x + size_x * BLOCK_SIZE - 1; }
+int TANK::GetyEnd() { return y + size_y * BLOCK_SIZE - 1; }
 void TANK::ChangeWeapon(int new_weapon_id) { weapon_id = new_weapon_id; }
 void TANK::ChangeCannotGo(int new_cannot_go) { cannot_go = new_cannot_go; }
+
+void TANK::SetIterator(std::list<class TANK>::iterator ite_tank)
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + size_x * BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			map[i][j].tank = ite_tank;
+}
+
+void TANK::ClearIterator()
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + size_x * BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			map[i][j].tank = list_tank_null.end();
+}

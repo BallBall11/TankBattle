@@ -3,6 +3,7 @@
 #include <graphics.h>
 
 extern BLOCK* FindBlock(int index);
+extern std::list<class FLY>	list_fly_null;
 
 FLY_TYPE fly_type[MAX_FLY];
 
@@ -33,15 +34,19 @@ void FLY::Turning(int position) { facing = position; }
 
 void FLY::Move()
 {
-	int t_x = x, t_y = y;
+	std::list<class FLY>::iterator fly_iterator;
+	fly_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].fly;
+	ClearIterator();
 	for (int i = 0; i < speed; i++)
 	{
-		t_x += dir[facing].x;
-		t_y += dir[facing].y;
+		int t_x = x + dir[facing].x;
+		int t_y = y + dir[facing].y;
+
 		if (!CanStand(t_x, t_y)) break;
 		x = t_x;
 		y = t_y;
 	}
+	SetIterator(fly_iterator);
 }
 
 bool FLY::CanStand(int x, int y)
@@ -67,16 +72,10 @@ void FLY::FlyClear() {
 	}
 }
 
-int FLY::Getx() { return x; }
-int FLY::Gety() { return y; }
-int FLY::GetxEnd() { return x + size_x; }
-int FLY::GetyEnd() { return y + size_y; }
-int FLY::Getid() { return id; }
-
 void FLY::Paint()
 {
 #define PI 3.14159265
-	IMAGE print_picture ;
+	IMAGE print_picture = NULL;
 	switch (facing)
 	{
 	case UP:
@@ -95,3 +94,30 @@ void FLY::Paint()
 	putimage(ScreenXPixel(x), ScreenYPixel(y), &print_picture);
 #undef PI
 }
+
+int FLY::Getx() { return x; }
+int FLY::Gety() { return y; }
+int FLY::GetxEnd() { return x + size_x; }
+int FLY::GetyEnd() { return y + size_y; }
+int FLY::Getid() { return id; }
+
+void FLY::SetIterator(std::list<class FLY>::iterator ite_fly)
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + size_x * BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			map[i][j].fly = ite_fly;
+}
+
+void FLY::ClearIterator()
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + size_x * BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			map[i][j].fly = list_fly_null.end();
