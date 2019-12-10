@@ -7,11 +7,6 @@
 #define WIN_ROW 30		//窗口列数
 #define FPS 10			//屏幕刷新率
 
-#define MASK_BLOCK	0xFFFFFFF0
-#define MASK_TANK	0xFFFFF00F
-#define MASK_ENTITY	0xFFFF0FFF
-#define MASK_FLY	0xF000FFFF
-
 
 #define BLOCK_SIZE 16
 //一个格子的像素宽度
@@ -23,10 +18,6 @@
 #include "ENTITY.h"
 #include "FLY.h"
 
-#define UP		0
-#define DOWN	1
-#define LEFT	2
-#define RIGHT	3
 struct DIRECTION
 {
 	int y, x;
@@ -35,29 +26,51 @@ struct DIRECTION
 struct CELL
 {
 	BLOCK* block;
-	std::list<TANK>::iterator tank;
-	std::list<ENTITY>::iterator entity;
-	std::list<FLY>::iterator fly;
+	std::list<class TANK>::iterator tank;
+	std::list<class ENTITY>::iterator entity;
+	std::list<class FLY>::iterator fly;
 };
 
-extern DIRECTION dir[4];	//方向数组，
+extern DIRECTION dir[4];	//方向数组
 extern CELL map[MAX_MAP][MAX_MAP];
 extern DWORD starttime;
 extern DWORD START;
-extern std::list<TANK> list_tank;
-extern std::list<ENTITY> list_entity;
-extern std::list<FLY> list_fly;
 extern BLOCK block_type[MAX_BLOCK];
+extern std::list<class TANK>		list_tank;
+extern std::list<class ENTITY>		list_entity;
+extern std::list<class FLY>		list_fly;
 
 int	ChangeToScreen(int x);
+int ChangeToPixel(int x);
+
 void Gotoxy(int x, int y);	//屏幕x坐标为列坐标，y坐标为行坐标
+
 int Tick(int interVal);
+
 bool IsInMap(int i, int j);
+
 void End();
 void Lose();
 void Win();
+
 void ChangeMap(int i, int j, int B_ID);
+
 int ScreenX(int x);					//返回格点左上角X坐标
 int ScreenY(int y);					//返回格点左上角Y坐标
+int ScreenXPixel(int x);			//返回地图到屏幕的像素坐标X
+int ScreenYPixel(int y);			//返回地图到屏幕的像素坐标Y
+
+
 void LoadResources();
+
+void list_setup();
+
+void InsertTank(int id, int x, int y, int facing);
+void InsertEntity(int id, int type, int x, int y);
+void InsertFly(int id, int x, int y, int facing);
+
+void DeleteTank(std::list<class TANK>::iterator tank_iterator);
+void DeleteEntity(std::list<class ENTITY>::iterator entity_iterator);
+void DeleteFly(std::list<class FLY>::iterator fly_iterator);
+
 #endif

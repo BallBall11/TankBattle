@@ -4,7 +4,6 @@
 #include "TANK.h"
 #include "basic_define.h"
 #include <rpc.h>
-#include "BLOCK.cpp"
 
 int TankCrashBlock(TANK* tank, BLOCK* block, int block_x, int block_y) {
 	int x = -1;

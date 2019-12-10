@@ -4,6 +4,7 @@ TANK_TYPE tank_type[MAX_TANK];
 extern FLY_TYPE fly_type[MAX_FLY];
 extern std::list<class TANK> list_tank_null;
 
+
 TANK::TANK(int Iid, int Ix, int Iy, int Ifacing)
 {
 	id = Iid;
@@ -37,7 +38,8 @@ void TANK::Move()
 	std::list<class TANK>::iterator tank_iterator;
 	tank_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].tank;
 	ClearIterator();
-	for (int i = 0; i < speed; i++)		//我还是坚持我自己的Move函数
+
+	for (int i = 0; i < speed; i++)		//鎴戣繕鏄潥鎸佹垜鑷繁鐨凪ove鍑芥暟
 	{
 		int xx = x + dir[facing].x;
 		int yy = y + dir[facing].y;
@@ -45,7 +47,9 @@ void TANK::Move()
 		x = xx;
 		y = yy;
 	}
+
 	SetIterator(tank_iterator);
+
 }
 
 void TANK::Paint()
@@ -97,7 +101,7 @@ void TANK::TankClear()
 
 void TANK::Shoot()
 {
-	int fly_x = -1, fly_y = -1;
+    int fly_x = -1, fly_y = -1;
 	int fly_size_x = fly_type[weapon_id].size_x;
 	int fly_size_y = fly_type[weapon_id].size_y;
 	switch (facing)

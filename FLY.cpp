@@ -15,6 +15,7 @@ FLY::FLY(
 )
 {
 	id = Iid;
+	picture = fly_type[id].picture;
 	x = Ix;
 	y = Iy;
 	facing = Ifacing;
@@ -40,6 +41,7 @@ void FLY::Move()
 	{
 		int t_x = x + dir[facing].x;
 		int t_y = y + dir[facing].y;
+
 		if (!CanStand(t_x, t_y)) break;
 		x = t_x;
 		y = t_y;
@@ -56,7 +58,7 @@ bool FLY::CanStand(int x, int y)
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
 		{
-			if (map[i][j].block->IsPassable()) return 0;
+			if (!map[i][j].block->IsPassable()) return 0;
 		}
 	return 1;
 }
@@ -119,4 +121,3 @@ void FLY::ClearIterator()
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
 			map[i][j].fly = list_fly_null.end();
-}
