@@ -8,16 +8,15 @@
 class FLY
 {
 private:
-	IMAGE	picture;			//å­å¼¹çš„è´´å›¾
-	int		id;					//å­å¼¹çš„ID
-	int		x;					//å­å¼¹çš„xåæ ‡(åƒç´ åæ ‡)
-	int		y;					//å­å¼¹çš„yåæ ‡(åƒç´ åæ ‡)
-	int		size_x;				//å­å¼¹çš„xå¤§å°
-	int		size_y;				//å­å¼¹çš„yå¤§å°
-	int		facing;				//å­å¼¹çš„æœå‘
-	int		speed;				//å­å¼¹çš„é€Ÿåº¦
-	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„
-
+	IMAGE	picture;			//×Óµ¯µÄÌùÍ¼
+	int		id;					//×Óµ¯µÄID
+	int		x;					//×Óµ¯µÄx×ø±ê(ÏñËØ×ø±ê)
+	int		y;					//×Óµ¯µÄy×ø±ê(ÏñËØ×ø±ê)
+	int		size_x;				//×Óµ¯µÄx´óĞ¡
+	int		size_y;				//×Óµ¯µÄy´óĞ¡
+	int		facing;				//×Óµ¯µÄ³¯Ïò
+	int		speed;				//×Óµ¯µÄËÙ¶È
+	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶
 public:
 	FLY(
 		int Iid,
@@ -28,26 +27,22 @@ public:
 	bool	CanStand(int x, int y);
 	void	Turning(int position);
 	void	Move();
-	void	Paint();
 	void    FlyClear();
 	int		Getx();
 	int		Gety();
 	int		GetxEnd();
 	int		GetyEnd();
 	int		Getid();
-	void	SetIterator(std::list<class FLY>::iterator ite_fly);
-	void	ClearIterator();
-	bool	IsAlive();
-	int		Getfacing();
+	void	Paint();
 };
 
 struct FLY_TYPE
 {
-	IMAGE	picture;			//å­å¼¹è´´å›¾
-	int		size_x;				//å­å¼¹çš„xå¤§å°
-	int		size_y;				//å­å¼¹çš„yå¤§å°
-	int		speed;				//å­å¼¹çš„é€Ÿåº¦
-	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„			
+	IMAGE	picture;			//×Óµ¯ÌùÍ¼
+	int		size_x;				//×Óµ¯µÄx´óĞ¡
+	int		size_y;				//×Óµ¯µÄy´óĞ¡
+	int		speed;				//×Óµ¯µÄËÙ¶È
+	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶			
 	FLY_TYPE(
 		LPCTSTR	Lpicture,
 		int		Isize_x,

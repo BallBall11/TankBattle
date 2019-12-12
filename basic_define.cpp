@@ -86,7 +86,8 @@ void LoadResources()
 	block_type[8] = BLOCK(_T("resources\\block\\掩体.gif"), B_SHIELD,	1, 1, 0, 0, 0, false, true , true );
 	block_type[9] = BLOCK(_T("resources\\block\\基地.gif"), B_BASEMENT, 1, 1, 0, 0, 0, false, false, false);
 	////////////////
-	tank_type[0] = TANK_TYPE(_T("resources\\tank\\坦克1.gif"), 3, 3, 1, 1);
+	tank_type[0] = TANK_TYPE(_T("resources\\tank\\己方坦克.gif"), 3, 3, 1, 1);
+	tank_type[1] = TANK_TYPE(_T("resources\\tank\\敌方坦克.gif"), 3, 3, 1, 1);
 	////////////////
 	fly_type[0] = FLY_TYPE(_T("resources\\fly\\普通.gif"), 1, 1, 3, 0);
 	fly_type[1] = FLY_TYPE(_T("resources\\fly\\爆破.gif"), 1, 1, 2, 1);
