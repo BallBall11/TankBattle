@@ -23,6 +23,7 @@ class BLOCK
 {
 private:
 	IMAGE	picture;
+	IMAGE	picture_cover;
 	int		size_x;						//x坐标大小
 	int		size_y;						//y坐标大小
 	int		explosion_radium;			//爆炸半径
@@ -46,10 +47,10 @@ public:
 	int		GetxEnd(int x);
 	int		GetyEnd(int y);
 	void	BlockClear(int x, int y);
-	void	ChangeToSpace();
 
 	BLOCK(
 		LPCTSTR	Lway,
+		LPCTSTR Lcover,
 		int		Iid,
 		int		Isize_x,
 		int		Isize_y,
@@ -62,6 +63,7 @@ public:
 	)
 	{
 		loadimage(&picture, Lway);
+		loadimage(&picture_cover, Lcover);
 		id = Iid;
 		size_x = Isize_x;
 		size_y = Isize_y;

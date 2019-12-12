@@ -2,11 +2,14 @@
 #ifndef ENTITY_INCLUDED
 #define ENTITY_INCLUDED
 
+#define MAX_ENTITY 6
 #include "basic_define.h"
 
 class ENTITY
 {
 private:
+	IMAGE	picture;		//贴图
+	IMAGE	picture_cover;	//掩图
 	int		id;				//实体的id
 	int		type;			//实体的类型
 	int		x;				//实体的x坐标(像素坐标)
@@ -26,6 +29,11 @@ public:
 	int		Gety();
 	int		GetxEnd();
 	int		GetyEnd();
+};
+
+struct ENTITY_TYPE
+{
+
 };
 
 #endif

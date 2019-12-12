@@ -1,6 +1,8 @@
 #include "ENTITY.h"
 #include <graphics.h>
 
+ENTITY_TYPE entity_type[MAX_ENTITY];
+
 void ENTITY::GetEntity(std::list<TANK>::iterator tank)
 {
 	switch (type)
@@ -39,7 +41,6 @@ ENTITY::ENTITY()
 	type = -1;
 	x = 0;
 	y = 0;
-
 }
 
 void ENTITY::EntityClear()

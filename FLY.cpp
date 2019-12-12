@@ -2,7 +2,6 @@
 #include "BLOCK.h"
 #include <graphics.h>
 
-extern BLOCK* FindBlock(int index);
 extern std::list<class FLY>	list_fly_null;
 
 FLY_TYPE fly_type[MAX_FLY];
@@ -15,10 +14,13 @@ FLY::FLY(
 )
 {
 	id = Iid;
-	picture = fly_type[id].picture;
 	x = Ix;
 	y = Iy;
 	facing = Ifacing;
+
+	picture = fly_type[id].picture;
+	picture_cover = fly_type[id].picture_cover;
+
 	size_x = fly_type[id].size_x;
 	size_y = fly_type[id].size_y;
 	speed = fly_type[id].speed;
@@ -27,7 +29,8 @@ FLY::FLY(
 FLY::FLY()
 {
 	id = -1;
-	x = y = facing = size_x = size_y = speed = 0;
+	x = y = facing = size_x = size_y = speed = explosion_radium = 0;
+	picture = picture_cover = NULL;
 }
 
 void FLY::Turning(int position) { facing = position; }
@@ -41,7 +44,6 @@ void FLY::Move()
 	{
 		int t_x = x + dir[facing].x;
 		int t_y = y + dir[facing].y;
-
 		if (!CanStand(t_x, t_y)) break;
 		x = t_x;
 		y = t_y;
@@ -58,17 +60,19 @@ bool FLY::CanStand(int x, int y)
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
 		{
-			if (!map[i][j].block->IsPassable()) return 0;
+			if (map[i][j].block->IsPassable()) return 0;
 		}
 	return 1;
 }
 
-void FLY::FlyClear() {
-	switch (facing) {
+void FLY::FlyClear() 
+{
+	switch (facing) 
+	{
 	case DOWN: 
 	case UP: clearrectangle(x, y, x + size_y, y + size_x); break;
 	case RIGHT:
-	case LEFT:clearrectangle(x, y, x + size_x, y + size_y);
+	case LEFT:clearrectangle(x, y, x + size_x, y + size_y); break;
 	}
 }
 
@@ -76,22 +80,28 @@ void FLY::Paint()
 {
 #define PI 3.14159265
 	IMAGE print_picture = NULL;
+	IMAGE print_cover = NULL;
 	switch (facing)
 	{
 	case UP:
 		print_picture = picture;
+		print_cover = picture_cover;
 		break;
 	case DOWN:
-		rotateimage(&print_picture, &picture, PI);
+		rotateimage(&print_picture, &picture, PI, BLACK);
+		rotateimage(&print_cover, &picture_cover, PI, WHITE);
 		break;
 	case LEFT:
-		rotateimage(&print_picture, &picture, PI / 2);
+		rotateimage(&print_picture, &picture, PI / 2, BLACK);
+		rotateimage(&print_cover, &picture_cover, PI / 2, WHITE);
 		break;
 	case RIGHT:
-		rotateimage(&print_picture, &picture, -PI / 2);
+		rotateimage(&print_picture, &picture, -PI / 2, BLACK);
+		rotateimage(&print_cover, &picture_cover, -PI / 2, WHITE);
 		break;
 	}
-	putimage(ScreenXPixel(x), ScreenYPixel(y), &print_picture);
+	putimage(ScreenXPixel(x), ScreenYPixel(y), &print_cover, SRCAND);
+	putimage(ScreenXPixel(x), ScreenYPixel(y), &print_picture, SRCPAINT);
 #undef PI
 }
 
@@ -100,8 +110,6 @@ int FLY::Gety() { return y; }
 int FLY::GetxEnd() { return x + size_x; }
 int FLY::GetyEnd() { return y + size_y; }
 int FLY::Getid() { return id; }
-int FLY::Getfacing() { return facing; }
-bool FLY::IsAlive() { return speed ? 1 : 0; }
 
 void FLY::SetIterator(std::list<class FLY>::iterator ite_fly)
 {
@@ -123,3 +131,4 @@ void FLY::ClearIterator()
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
 			map[i][j].fly = list_fly_null.end();
+}
