@@ -1,3 +1,3 @@
 # TankBattle
 
-This is a assigment of our school.
+This is an assignment of our school.
