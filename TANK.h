@@ -23,7 +23,7 @@
 #define BIG_HEALING_BLOOD 2
 
 enum Direction_Cannot_Go {
-	UP, DOWN, LEFT, RIGHT,
+	UP, DOWN, LEFT, RIGHT
 };
 
 class TANK
@@ -41,7 +41,6 @@ private:
 	int		speed = 1;			//坦克的速度
 	int		cold_time = 0;		//武器冷却时间，为零可以攻击
 	bool	cannot_go[4] = { 0 };	//坦克哪个方向不能走
-	void	ClearIterator();
 public:
 	TANK(
 		int Iid,
@@ -68,6 +67,7 @@ public:
 	void	ChangeCannotGo(int new_cannot_go);
 	void	ChangeCanGo(int new_can_go);
 	void	SetIterator(std::list<class TANK>::iterator ite_tank);
+	void	ClearIterator();
 };
 
 struct TANK_TYPE

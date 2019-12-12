@@ -1,10 +1,8 @@
 #include "basic_define.h"
-
 using namespace std;
-extern BLOCK block_type[MAX_BLOCK];
 
 void ITankCrash(list<class TANK>::iterator i_tank) {
-	int cell_x = i_tank->Getx / BLOCK_SIZE, cell_y = i_tank->Gety / BLOCK_SIZE;
+	int cell_x = i_tank->Getx() / BLOCK_SIZE, cell_y = i_tank->Gety() / BLOCK_SIZE;
 	if (IsInMap(cell_x - 1, cell_y))
 	{
 		if (map[cell_x - 1][cell_y].fly->IsAlive()
@@ -120,7 +118,7 @@ void ITankCrash(list<class TANK>::iterator i_tank) {
 }
 
 void EnemyTankCrash(list<class TANK>::iterator enemy_tank) {
-	int cell_x = enemy_tank->Getx / BLOCK_SIZE, cell_y = enemy_tank->Gety / BLOCK_SIZE;
+	int cell_x = enemy_tank->Getx() / BLOCK_SIZE, cell_y = enemy_tank->Gety() / BLOCK_SIZE;
 	if (IsInMap(cell_x - 1, cell_y))
 	{
 		if (map[cell_x - 1][cell_y].fly->IsAlive()
