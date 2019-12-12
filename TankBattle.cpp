@@ -14,16 +14,17 @@
 #include"FLY.h"
 #include"basic_define.h"
 
+#define MAX_ENEMY 20
 using namespace std;
 int scr_x, scr_y;
 extern BLOCK block_type[MAX_BLOCK];
 static struct DATA
 {
-	int score;
-	int num_enemy;
-	int num_entity;
-	int num_destroyed_basement;
-}data;
+	int score=0;
+	int num_enemy=0;
+	int num_entity=0;
+	int num_destroyed_basement=0;
+}total_data;
 
 void Print();
 bool DataChange(list<class TANK>::iterator a);
@@ -182,6 +183,16 @@ bool DataChange(list<class TANK>::iterator me)
 	}
 	for (list<class FLY>::iterator it = list_fly.begin(); it != list_fly.end(); it++)
 		it->Move();
+	{
+		GenerateEnemy();
+		list<class TANK>::iterator it = list_tank.begin();
+		it++;
+		for (; it != list_tank.end(); it++)
+		{
+			it->Move();
+			it->Turning(rand() % 4);
+		}
+	}
 	return 1;
 }
 
@@ -267,8 +278,21 @@ bool IsBase(int i, int j)
 
 void GenerateEnemy()
 {
-	int tx = rand() / MAX_MAP, ty = rand() / MAX_MAP;
-
+	if (total_data.num_enemy <= MAX_ENEMY)
+	{
+		int tx = rand() % WIN_COL;
+		int ty = rand() % WIN_ROW;
+		if (rand() % 2 == 0) tx = -tx;
+		if (rand() % 2 == 0) ty = -ty;
+		tx += scr_x / BLOCK_SIZE;
+		ty += scr_y / BLOCK_SIZE;
+		for (int i = tx; i <= tx + 2; i++)
+			for (int j = ty; i <= ty + 2; j++)
+				if (!IsInMap(i, j) && !map[i][j].block->IsPassable())
+					return;
+		list_tank.push_back(TANK(1, tx * BLOCK_SIZE, ty * BLOCK_SIZE, UP));
+		total_data.num_enemy++;
+	}
 }
 
 void PaintBackground(int i, int j)
