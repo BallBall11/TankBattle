@@ -18,8 +18,6 @@ private:
 	int		speed;				//子弹的速度
 	int		explosion_radium;	//子弹的爆破半径
 
-	void	ClearIterator();
-
 public:
 	FLY(
 		int Iid,
@@ -38,6 +36,9 @@ public:
 	int		GetyEnd();
 	int		Getid();
 	void	SetIterator(std::list<class FLY>::iterator ite_fly);
+	void	ClearIterator();
+	bool	IsAlive();
+	int		Getfacing();
 };
 
 struct FLY_TYPE

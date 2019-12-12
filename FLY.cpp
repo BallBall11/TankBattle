@@ -100,6 +100,8 @@ int FLY::Gety() { return y; }
 int FLY::GetxEnd() { return x + size_x; }
 int FLY::GetyEnd() { return y + size_y; }
 int FLY::Getid() { return id; }
+int FLY::Getfacing() { return facing; }
+bool FLY::IsAlive() { return speed ? 1 : 0; }
 
 void FLY::SetIterator(std::list<class FLY>::iterator ite_fly)
 {

@@ -23,11 +23,7 @@
 #define BIG_HEALING_BLOOD 2
 
 enum Direction_Cannot_Go {
-	NONE = -1,
 	UP, DOWN, LEFT, RIGHT,
-	UP_DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, LEFT_RIGHT,
-	UP_DOWN_LEFT, UP_DOWN_RIGHT, UP_LEFT_RIGHT, DOWN_LEFT_RIGHT,
-	UP_DOWN_LEFT_RIGHT
 };
 
 class TANK
@@ -44,7 +40,7 @@ private:
 	int		blood;				//坦克的血量
 	int		speed = 1;			//坦克的速度
 	int		cold_time = 0;		//武器冷却时间，为零可以攻击
-	int		cannot_go;			//坦克哪个方向不能走
+	bool	cannot_go[4] = { 0 };	//坦克哪个方向不能走
 	void	ClearIterator();
 public:
 	TANK(
@@ -67,8 +63,10 @@ public:
 	int		Gety();
 	int		GetxEnd();
 	int		GetyEnd();
+	int		Getfacing();
 	void	ChangeWeapon(int new_weapon_id);
 	void	ChangeCannotGo(int new_cannot_go);
+	void	ChangeCanGo(int new_can_go);
 	void	SetIterator(std::list<class TANK>::iterator ite_tank);
 };
 

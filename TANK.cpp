@@ -132,8 +132,10 @@ int TANK::Getx() { return x; }
 int TANK::Gety() { return y; }
 int TANK::GetxEnd() { return x + size_x * BLOCK_SIZE - 1; }
 int TANK::GetyEnd() { return y + size_y * BLOCK_SIZE - 1; }
+int TANK::Getfacing() { return facing; }
 void TANK::ChangeWeapon(int new_weapon_id) { weapon_id = new_weapon_id; }
-void TANK::ChangeCannotGo(int new_cannot_go) { cannot_go = new_cannot_go; }
+void TANK::ChangeCannotGo(int new_cannot_go) { cannot_go[new_cannot_go] = 1; }
+void TANK::ChangeCanGo(int new_can_go) { cannot_go[new_can_go] = 0; }
 
 void TANK::SetIterator(std::list<class TANK>::iterator ite_tank)
 {

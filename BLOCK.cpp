@@ -52,3 +52,6 @@ int BLOCK::Getx(int x) { return x * BLOCK_SIZE; }
 int BLOCK::Gety(int y) { return y * BLOCK_SIZE; }
 int BLOCK::GetxEnd(int x) { return (x + size_x) * BLOCK_SIZE; }
 int BLOCK::GetyEnd(int y) { return (y + size_y) * BLOCK_SIZE; }
+void BLOCK::ChangeToSpace() {
+	BLOCK(_T("resources\\block\\·.gif"), B_SPACE, 1, 1, 0, 0, 0, false, true, false);
+}

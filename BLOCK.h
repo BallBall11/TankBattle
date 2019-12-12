@@ -46,6 +46,7 @@ public:
 	int		GetxEnd(int x);
 	int		GetyEnd(int y);
 	void	BlockClear(int x, int y);
+	void	ChangeToSpace();
 
 	BLOCK(
 		LPCTSTR	Lway,
