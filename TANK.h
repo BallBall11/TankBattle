@@ -2,10 +2,10 @@
 #ifndef TANK_INCLUDED
 #define TANK_INCLUDED
 
-#include"basic_define.h"
-#include<easyx.h>
-#include<graphics.h>
-#include<conio.h>
+#include "basic_define.h"
+#include <easyx.h>
+#include <graphics.h>
+#include <conio.h>
 
 #define MAX_TANK 2
 
@@ -14,33 +14,42 @@
 #define WE_BASIC 0
 #define WE_LASER 1
 #define WE_EXPLOSION 2
+#define MAX_WEAPON 3
 
 #define HEAL 1
 
 #define HE_SMALL 0
 #define SMALL_HEALING_BLOOD 1
 #define HE_BIG 1
-#define BIG_HEALING_BLOOD 2
+#define BIG_HEALING_BLOOD 3
 
 enum Direction_Cannot_Go {
-	UP, DOWN, LEFT, RIGHT
+	NONE = -1,
+	UP, DOWN, LEFT, RIGHT,
+	UP_DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, LEFT_RIGHT,
+	UP_DOWN_LEFT, UP_DOWN_RIGHT, UP_LEFT_RIGHT, DOWN_LEFT_RIGHT,
+	UP_DOWN_LEFT_RIGHT
 };
 
 class TANK
 {
 private:
-	IMAGE	picture;			//å¦å…‹çš„è´´å›¾
-	int		id;					//å¦å…‹çš„ID
-	int		x;					//å¦å…‹çš„xåæ ‡(åƒç´ åæ ‡)
-	int		y;					//å¦å…‹çš„yåæ ‡(åƒç´ åæ ‡)
-	int		size_x;				//å¦å…‹çš„xå¤§å°
-	int		size_y;				//å¦å…‹çš„yå¤§å°
-	int		facing;				//å¦å…‹çš„æœå‘
-	int		weapon_id;			//å¦å…‹çš„æ­¦å™¨ID
-	int		blood;				//å¦å…‹çš„è¡€é‡
-	int		speed = 1;			//å¦å…‹çš„é€Ÿåº¦
-	int		cold_time = 0;		//æ­¦å™¨å†·å´æ—¶é—´ï¼Œä¸ºé›¶å¯ä»¥æ”»å‡»
-	bool	cannot_go[4] = { 0 };	//å¦å…‹å“ªä¸ªæ–¹å‘ä¸èƒ½èµ°
+	IMAGE	picture;			//Ì¹¿ËµÄÌùÍ¼
+	IMAGE	picture_cover;		//ÑÚÍ¼
+	int		id;					//Ì¹¿ËµÄID
+	int		x;					//Ì¹¿ËµÄx×ø±ê(ÏñËØ×ø±ê)
+	int		y;					//Ì¹¿ËµÄy×ø±ê(ÏñËØ×ø±ê)
+	int		size_x;				//Ì¹¿ËµÄx´óĞ¡
+	int		size_y;				//Ì¹¿ËµÄy´óĞ¡
+	int		facing;				//Ì¹¿ËµÄ³¯Ïò
+	int		weapon_id;			//Ì¹¿ËµÄÎäÆ÷ID
+	int		blood;				//Ì¹¿ËµÄÑªÁ¿
+	int		speed = 1;			//Ì¹¿ËµÄËÙ¶È
+	int		cold_time = 0;		//ÎäÆ÷ÀäÈ´Ê±¼ä£¬ÎªÁã¿ÉÒÔ¹¥»÷
+	int		use_times = -1;		//ÎäÆ÷Ê¹ÓÃ´ÎÊı£¬Îª-1±íÊ¾ÎŞÏŞÊ¹ÓÃ
+	int		cannot_go;			//Ì¹¿ËÄÄ¸ö·½Ïò²»ÄÜ×ß
+
+	void	ClearIterator(std::list<class TANK>::iterator ite_tank);
 public:
 	TANK(
 		int Iid,
@@ -48,44 +57,48 @@ public:
 		int Iy,
 		int Ifacing);
 	TANK();
-	bool	CanStand(int x, int y);
-	void	Turning(int position);
-	bool	Hurt(int hurt);
-	void	Move();
-	int		Speed() { return speed; }
-	bool	CanMove();
-	void 	Paint();
-	void    TankClear();
-	void	Shoot();
-	bool	CanShoot();
+	bool	CanStand(int x, int y);				//ÅĞ¶ÏÊÇ·ñ¿¨Ç½
+	void	Turning(int position);				//×ªÏò
+	bool	Hurt(int hurt,std::list<class TANK>::iterator ite_tank);
+												//ÊÜÉËor»ØÑª
+	void	Move();								//ÒÆ¶¯
+	int		Speed() { return speed; }			//»ñÈ¡ËÙ¶È£¨ËÆºõÃ»ÓÃ...£©
+	bool	CanMove();							//ÓĞÎÊÌâ
+	void 	Paint();							//Êä³ö
+	void    TankClear(std::list<class TANK>::iterator ite_tank);
+												//Çå³ı
+	void	Shoot();							//Éä»÷
+	void	Flash();							//Ã¿Ö¡¸üĞÂÊı¾İ
+	bool	CanShoot();							//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÉä»÷
 	int		Getx();
-	int		Gety();
+	int		Gety();								//×óÉÏ×ø±êµÄx,yÖµ
 	int		GetxEnd();
-	int		GetyEnd();
-	int		Getfacing();
-	void	ChangeWeapon(int new_weapon_id);
-	void	ChangeCannotGo(int new_cannot_go);
-	void	ChangeCanGo(int new_can_go);
+	int		GetyEnd();							//ÓÒÏÂ×ø±êµÄx,yÖµ
+	void	ChangeWeapon(int new_weapon_id);	//»»ÎäÆ÷
+	void	ChangeCannotGo(int new_cannot_go);	//¸üĞÂ²»ÄÜ×ßµÄ·½Ïò
 	void	SetIterator(std::list<class TANK>::iterator ite_tank);
-	void	ClearIterator();
+												//¸üĞÂmap
 };
 
 struct TANK_TYPE
 {
-	IMAGE	picture;			//å¦å…‹è´´å›¾
-	int		size_x;				//å¦å…‹çš„xå¤§å°
-	int		size_y;				//å¦å…‹çš„yå¤§å°
-	int		blood;				//å¦å…‹çš„è¡€é‡
-	int		speed;				//å¦å…‹çš„é€Ÿåº¦
+	IMAGE	picture;			//Ì¹¿ËÌùÍ¼
+	IMAGE	picture_cover;		//ÑÚÍ¼
+	int		size_x;				//Ì¹¿ËµÄx´óĞ¡
+	int		size_y;				//Ì¹¿ËµÄy´óĞ¡
+	int		blood;				//Ì¹¿ËµÄÑªÁ¿
+	int		speed;				//Ì¹¿ËµÄËÙ¶È
 	TANK_TYPE(
-		LPCTSTR	Lpictrue,
+		LPCTSTR	Lpicture,
+		LPCTSTR	Lpicture_cover,
 		int		Isize_x,
 		int		Isize_y,
 		int		Iblood,
 		int		Ispeed
 	)
 	{
-		loadimage(&picture, Lpictrue);
+		loadimage(&picture, Lpicture);
+		loadimage(&picture_cover, Lpicture_cover);
 		size_x = Isize_x;
 		size_y = Isize_y;
 		blood = Iblood;
@@ -101,5 +114,25 @@ struct TANK_TYPE
 	}
 };
 
+struct WEAPON_DATA
+{
+	int use_times;
+	int cold_time;
+	int force;
+	WEAPON_DATA()
+	{
+		use_times = cold_time = force = 0;
+	}
+	WEAPON_DATA(
+		int	Iuse_times,
+		int	Icold_time,
+		int	Iforce
+	)
+	{
+		use_times = Iuse_times;
+		cold_time = Icold_time;
+		force = Iforce;
+	}
+};
 
 #endif

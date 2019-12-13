@@ -3,9 +3,9 @@
 #ifndef BLOCK_INCLUDED
 #define BLOCK_INCLUDED
 
-#include<easyx.h>
-#include<graphics.h>
-#include<conio.h>
+#include <easyx.h>
+#include <graphics.h>
+#include <conio.h>
 
 #define B_SPACE		0x00000000
 #define B_ONE		0x00000001
@@ -23,6 +23,8 @@ class BLOCK
 {
 private:
 	IMAGE	picture;
+	IMAGE	picture_cover;
+	int		id;							//方块ID
 	int		size_x;						//x坐标大小
 	int		size_y;						//y坐标大小
 	int		explosion_radium;			//爆炸半径
@@ -32,24 +34,24 @@ private:
 	bool	is_passable;				//可通过
 	bool	is_cover;					//是否是掩体方块
 
-	void	Explode(int x, int y, int r, int forces);
 	bool	Check(int x1, int y1, int x2, int y2, int r);
 public:
-	int		id;							//方块ID
-	void	Destroy(int x, int y, int harm = 1);
-	bool	IsExplosive();
-	bool	IsPassable();
-	bool	IsCover() { return is_cover; }
-	void	Paint(int x, int y);
+	void	Explode(int x, int y, int r, int forces);			//方块爆炸
+	void	Destroy(int x, int y, int harm = 1);				//方块受伤摧毁
+	bool	IsExplosive();										//方块是否可爆炸
+	bool	IsPassable();										//方块是否可通过
+	bool	IsCover() { return is_cover; }						//方块是否是掩体
+	void	Paint(int x, int y);								//绘图
 	int		Getx(int x);
-	int		Gety(int y);
+	int		Gety(int y);										//左上坐标的x,y值
 	int		GetxEnd(int x);
-	int		GetyEnd(int y);
-	void	BlockClear(int x, int y);
-	void	ChangeToSpace();
+	int		GetyEnd(int y);										//右下坐标的x,y值
+	int		Getid();											//获取方块id
+	void	BlockClear(int x, int y);							//似乎没用...
 
 	BLOCK(
 		LPCTSTR	Lway,
+		LPCTSTR Lcover,
 		int		Iid,
 		int		Isize_x,
 		int		Isize_y,
@@ -62,6 +64,7 @@ public:
 	)
 	{
 		loadimage(&picture, Lway);
+		loadimage(&picture_cover, Lcover);
 		id = Iid;
 		size_x = Isize_x;
 		size_y = Isize_y;

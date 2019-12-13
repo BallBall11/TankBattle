@@ -1,7 +1,12 @@
 #include "ENTITY.h"
 #include <graphics.h>
 
-void ENTITY::GetEntity(std::list<TANK>::iterator tank)
+ENTITY_TYPE entity_type[MAX_ENTITY];
+extern std::list<class ENTITY> list_entity_null;
+
+void ENTITY::GetEntity(
+	std::list<TANK>::iterator tank,
+	std::list<class ENTITY>::iterator ite_entity)
 {
 	switch (type)
 	{
@@ -12,14 +17,15 @@ void ENTITY::GetEntity(std::list<TANK>::iterator tank)
 		switch (id)
 		{
 		case HE_SMALL:
-			tank->Hurt(-SMALL_HEALING_BLOOD);
+			tank->Hurt(-SMALL_HEALING_BLOOD, tank);
 			break;
 		case HE_BIG:
-			tank->Hurt(-BIG_HEALING_BLOOD);
+			tank->Hurt(-BIG_HEALING_BLOOD, tank);
 			break;
 		}
 		break;
 	}
+	ClearIterator(ite_entity);
 }
 
 ENTITY::ENTITY(
@@ -39,7 +45,6 @@ ENTITY::ENTITY()
 	type = -1;
 	x = 0;
 	y = 0;
-
 }
 
 void ENTITY::EntityClear()
@@ -53,3 +58,25 @@ int ENTITY::Getx() { return x; }
 int ENTITY::Gety() { return y; }
 int ENTITY::GetxEnd() { return x + BLOCK_SIZE; }
 int ENTITY::GetyEnd() { return y + BLOCK_SIZE; }
+
+void ENTITY::SetIterator(std::list<class ENTITY>::iterator ite_entity)
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			map[i][j].entity = ite_entity;
+}
+
+void ENTITY::ClearIterator(std::list<class ENTITY>::iterator ite_entity)
+{
+	int min_x = ChangeToScreen(x);
+	int min_y = ChangeToScreen(y);
+	int max_x = ChangeToScreen(x + BLOCK_SIZE - 1);
+	int max_y = ChangeToScreen(y + BLOCK_SIZE - 1);
+	for (int i = min_x; i <= max_x; i++)
+		for (int j = min_y; j <= max_y; j++)
+			if (map[i][j].entity == ite_entity) map[i][j].entity = list_entity_null.end();
+}
