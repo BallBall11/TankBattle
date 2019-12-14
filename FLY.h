@@ -18,28 +18,33 @@ private:
 	int		facing;				//子弹的朝向
 	int		speed;				//子弹的速度
 	int		explosion_radium;	//子弹的爆破半径
-
-	void	ClearIterator(std::list<class FLY>::iterator ite_fly);
+	void	FillingFly();		//专门针对激光的Move函数的辅助函数
+	bool	from_i;				//子弹是否来自我的坦克
 public:
 	FLY(
-		int Iid,
-		int Ix,
-		int Iy,
-		int Ifacing);
+		int		Iid,
+		int		Ix,
+		int		Iy,
+		int		Ifacing,
+		bool	Bdisappearable = false);
 	FLY();
 	bool	CanStand(int x, int y);						//是否卡墙
 	void	Turning(int position);						//转向
 	void	Move(std::list<class FLY>::iterator ite_fly);
 														//移动
 	void	Paint();									//绘图
-	void    FlyClear(std::list<class FLY>::iterator ite_fly);
-														//移除
+	bool	Clearable();								//是否可清除
+
 	int		Getx();
 	int		Gety();										//左上坐标的x,y值
 	int		GetxEnd();
 	int		GetyEnd();									//右下坐标的x,y值
 	int		Getid();									//获取子弹id
+	int		Getfacing();								//获取子弹方向
+	bool	IsAlive();									//子弹是否存在
+	bool	IsFromI();
 	void	SetIterator(std::list<class FLY>::iterator ite_fly);
+	void	ClearIterator(std::list<class FLY>::iterator ite_fly);
 														//更新map
 };
 

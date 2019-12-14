@@ -32,18 +32,17 @@ TANK::TANK()
 
 void TANK::Turning(int position) { facing = position; }
 
-bool TANK::Hurt(int hurt, std::list<class TANK>::iterator ite_tank)
+int	TANK::Hurt(int hurt)
 {
 	blood -= hurt;
-	if (blood <= 0) TankClear(ite_tank);
 	return blood > 0;
 }
 
-void TANK::Move()
+void TANK::Move(std::list<class TANK>::iterator ite_tank)
 {
 	std::list<class TANK>::iterator tank_iterator;
 	tank_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].tank;
-	ClearIterator();
+	ClearIterator(ite_tank);
 	for (int i = 0; i < speed; i++)
 	{
 		int xx = x + dir[facing].x;
@@ -53,6 +52,11 @@ void TANK::Move()
 		y = yy;
 	}
 	SetIterator(tank_iterator);
+}
+
+bool TANK::Clearable()
+{
+	return blood <= 0;
 }
 
 void TANK::Paint()
@@ -103,12 +107,6 @@ bool TANK::CanMove()
 	return map[y + dir[facing].y][x + dir[facing].x].block->IsPassable();
 }
 
-void TANK::TankClear(std::list<class TANK>::iterator ite_tank)
-{
-	DeleteTank(ite_tank);
-	TankClear(ite_tank);
-}
-
 void TANK::Shoot()
 {
 	int fly_x = -1, fly_y = -1;
@@ -149,6 +147,7 @@ int TANK::Getx() { return x; }
 int TANK::Gety() { return y; }
 int TANK::GetxEnd() { return x + size_x * BLOCK_SIZE - 1; }
 int TANK::GetyEnd() { return y + size_y * BLOCK_SIZE - 1; }
+int TANK::Getfacing() { return facing; }
 
 void TANK::ChangeWeapon(int new_weapon_id)
 {
@@ -156,7 +155,8 @@ void TANK::ChangeWeapon(int new_weapon_id)
 	use_times = weapon_data[weapon_id].use_times;
 }
 
-void TANK::ChangeCannotGo(int new_cannot_go) { cannot_go = new_cannot_go; }
+void TANK::ChangeCannotGo(int new_cannot_go) { cannot_go[new_cannot_go] = 1; }
+void TANK::ChangeCanGo(int new_can_go) { cannot_go[new_can_go] = 0; }
 
 void TANK::SetIterator(std::list<class TANK>::iterator ite_tank)
 {
@@ -177,7 +177,7 @@ void TANK::ClearIterator(std::list<class TANK>::iterator ite_tank)
 	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
-			if (map[i][j].tank == ite_tank) map[i][j].tank = list_tank_null.end();
+			/*if (map[i][j].tank == ite_tank) */map[i][j].tank = list_tank_null.end();
 }
 
 void TANK::Flash()

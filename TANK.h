@@ -12,8 +12,8 @@
 #define WEAPON 0
 
 #define WE_BASIC 0
-#define WE_LASER 1
-#define WE_EXPLOSION 2
+#define WE_EXPLOSION 1
+#define WE_LASER 2
 #define MAX_WEAPON 3
 
 #define HEAL 1
@@ -24,11 +24,7 @@
 #define BIG_HEALING_BLOOD 3
 
 enum Direction_Cannot_Go {
-	NONE = -1,
-	UP, DOWN, LEFT, RIGHT,
-	UP_DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, LEFT_RIGHT,
-	UP_DOWN_LEFT, UP_DOWN_RIGHT, UP_LEFT_RIGHT, DOWN_LEFT_RIGHT,
-	UP_DOWN_LEFT_RIGHT
+	UP, DOWN, LEFT, RIGHT
 };
 
 class TANK
@@ -47,9 +43,7 @@ private:
 	int		speed = 1;			//坦克的速度
 	int		cold_time = 0;		//武器冷却时间，为零可以攻击
 	int		use_times = -1;		//武器使用次数，为-1表示无限使用
-	int		cannot_go;			//坦克哪个方向不能走
-
-	void	ClearIterator(std::list<class TANK>::iterator ite_tank);
+	bool	cannot_go[4] = { 0 };	//坦克哪个方向不能走，值为1代表不能走
 public:
 	TANK(
 		int Iid,
@@ -59,14 +53,15 @@ public:
 	TANK();
 	bool	CanStand(int x, int y);				//判断是否卡墙
 	void	Turning(int position);				//转向
-	bool	Hurt(int hurt,std::list<class TANK>::iterator ite_tank);
+	int		Hurt(int hurt);
 												//受伤or回血
-	void	Move();								//移动
+	void	Move(std::list<class TANK>::iterator ite_tank);	
+												//移动
 	int		Speed() { return speed; }			//获取速度（似乎没用...）
 	bool	CanMove();							//有问题
 	void 	Paint();							//输出
-	void    TankClear(std::list<class TANK>::iterator ite_tank);
-												//清除
+	bool	Clearable();						//是否可清除
+
 	void	Shoot();							//射击
 	void	Flash();							//每帧更新数据
 	bool	CanShoot();							//判断是否可以射击
@@ -74,9 +69,12 @@ public:
 	int		Gety();								//左上坐标的x,y值
 	int		GetxEnd();
 	int		GetyEnd();							//右下坐标的x,y值
+	int		Getfacing();						//获取坦克方向
 	void	ChangeWeapon(int new_weapon_id);	//换武器
 	void	ChangeCannotGo(int new_cannot_go);	//更新不能走的方向
+	void	ChangeCanGo(int new_can_go);		//更新能走的方向
 	void	SetIterator(std::list<class TANK>::iterator ite_tank);
+	void	ClearIterator(std::list<class TANK>::iterator ite_tank);
 												//更新map
 };
 
