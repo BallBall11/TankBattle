@@ -8,16 +8,18 @@
 class FLY
 {
 private:
-	IMAGE	picture;			//å­å¼¹çš„è´´å›¾
-	int		id;					//å­å¼¹çš„ID
-	int		x;					//å­å¼¹çš„xåæ ‡(åƒç´ åæ ‡)
-	int		y;					//å­å¼¹çš„yåæ ‡(åƒç´ åæ ‡)
-	int		size_x;				//å­å¼¹çš„xå¤§å°
-	int		size_y;				//å­å¼¹çš„yå¤§å°
-	int		facing;				//å­å¼¹çš„æœå‘
-	int		speed;				//å­å¼¹çš„é€Ÿåº¦
-	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„
+	IMAGE	picture;			//×Óµ¯µÄÌùÍ¼
+	IMAGE	picture_cover;		//ÑÚÍ¼
+	int		id;					//×Óµ¯µÄID
+	int		x;					//×Óµ¯µÄx×ø±ê(ÏñËØ×ø±ê)
+	int		y;					//×Óµ¯µÄy×ø±ê(ÏñËØ×ø±ê)
+	int		size_x;				//×Óµ¯µÄx´óĞ¡
+	int		size_y;				//×Óµ¯µÄy´óĞ¡
+	int		facing;				//×Óµ¯µÄ³¯Ïò
+	int		speed;				//×Óµ¯µÄËÙ¶È
+	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶
 
+	void	ClearIterator(std::list<class FLY>::iterator ite_fly);
 public:
 	FLY(
 		int Iid,
@@ -25,31 +27,33 @@ public:
 		int Iy,
 		int Ifacing);
 	FLY();
-	bool	CanStand(int x, int y);
-	void	Turning(int position);
-	void	Move();
-	void	Paint();
-	void    FlyClear();
+	bool	CanStand(int x, int y);						//ÊÇ·ñ¿¨Ç½
+	void	Turning(int position);						//×ªÏò
+	void	Move(std::list<class FLY>::iterator ite_fly);
+														//ÒÆ¶¯
+	void	Paint();									//»æÍ¼
+	void    FlyClear(std::list<class FLY>::iterator ite_fly);
+														//ÒÆ³ı
 	int		Getx();
-	int		Gety();
+	int		Gety();										//×óÉÏ×ø±êµÄx,yÖµ
 	int		GetxEnd();
-	int		GetyEnd();
-	int		Getid();
+	int		GetyEnd();									//ÓÒÏÂ×ø±êµÄx,yÖµ
+	int		Getid();									//»ñÈ¡×Óµ¯id
 	void	SetIterator(std::list<class FLY>::iterator ite_fly);
-	void	ClearIterator();
-	bool	IsAlive();
-	int		Getfacing();
+														//¸üĞÂmap
 };
 
 struct FLY_TYPE
 {
-	IMAGE	picture;			//å­å¼¹è´´å›¾
-	int		size_x;				//å­å¼¹çš„xå¤§å°
-	int		size_y;				//å­å¼¹çš„yå¤§å°
-	int		speed;				//å­å¼¹çš„é€Ÿåº¦
-	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„			
+	IMAGE	picture;			//×Óµ¯ÌùÍ¼
+	IMAGE	picture_cover;		//ÑÚÌå
+	int		size_x;				//×Óµ¯µÄx´óĞ¡
+	int		size_y;				//×Óµ¯µÄy´óĞ¡
+	int		speed;				//×Óµ¯µÄËÙ¶È
+	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶			
 	FLY_TYPE(
 		LPCTSTR	Lpicture,
+		LPCTSTR Lpicture_cover,
 		int		Isize_x,
 		int		Isize_y,
 		int		Ispeed,
@@ -57,6 +61,7 @@ struct FLY_TYPE
 	)
 	{
 		loadimage(&picture, Lpicture);
+		loadimage(&picture_cover, Lpicture_cover);
 		size_x = Isize_x;
 		size_y = Isize_y;
 		speed = Ispeed;
