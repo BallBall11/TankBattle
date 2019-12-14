@@ -3,6 +3,9 @@
 std::list<class TANK>		list_tank;
 std::list<class ENTITY>		list_entity;
 std::list<class FLY>		list_fly;
+std::list<class TANK>		list_tank_null;
+std::list<class ENTITY>		list_entity_null;
+std::list<class FLY>		list_fly_null;
 
 void list_setup()			//请务必事先调用这个函数,建立链表用
 {
@@ -21,22 +24,25 @@ void InsertEntity(int id, int type, int x, int y)
 	list_entity.push_back(ENTITY(id, type, x, y));
 }
 
-void InsertFly(int id, int x, int y, int facing)
+void InsertFly(int id, int x, int y, int facing, bool disappearable)
 {
-	list_fly.push_back(FLY(id, x, y, facing));
+	list_fly.push_back(FLY(id, x, y, facing, disappearable));
 }
 
-void DeleteTank(std::list<class TANK>::iterator tank_iterator)
+std::list<class TANK>::iterator DeleteTank(std::list<class TANK>::iterator tank_iterator)
 {
-	list_tank.erase(tank_iterator);
+	tank_iterator->ClearIterator(tank_iterator);
+	return list_tank.erase(tank_iterator);
 }
 
-void DeleteEntity(std::list<class ENTITY>::iterator entity_iterator)
+std::list<class ENTITY>::iterator DeleteEntity(std::list<class ENTITY>::iterator entity_iterator)
 {
-	list_entity.erase(entity_iterator);
+	entity_iterator->ClearIterator(entity_iterator);
+	return list_entity.erase(entity_iterator);
 }
 
-void DeleteFly(std::list<class FLY>::iterator fly_iterator)
+std::list<class FLY>::iterator DeleteFly(std::list<class FLY>::iterator fly_iterator)
 {
-	list_fly.erase(fly_iterator);
+	fly_iterator->ClearIterator(fly_iterator);
+	return list_fly.erase(fly_iterator);
 }

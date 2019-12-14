@@ -32,18 +32,16 @@ TANK::TANK()
 
 void TANK::Turning(int position) { facing = position; }
 
-bool TANK::Hurt(int hurt, std::list<class TANK>::iterator ite_tank)
+void TANK::Hurt(int hurt)
 {
 	blood -= hurt;
-	if (blood <= 0) TankClear(ite_tank);
-	return blood > 0;
 }
 
-void TANK::Move()
+void TANK::Move(std::list<class TANK>::iterator ite_tank)
 {
 	std::list<class TANK>::iterator tank_iterator;
 	tank_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].tank;
-	ClearIterator();
+	ClearIterator(ite_tank);
 	for (int i = 0; i < speed; i++)
 	{
 		int xx = x + dir[facing].x;
@@ -53,6 +51,11 @@ void TANK::Move()
 		y = yy;
 	}
 	SetIterator(tank_iterator);
+}
+
+bool TANK::Clearable()
+{
+	return blood <= 0;
 }
 
 void TANK::Paint()
@@ -101,12 +104,6 @@ bool TANK::CanStand(int x, int y)
 bool TANK::CanMove()
 {
 	return map[y + dir[facing].y][x + dir[facing].x].block->IsPassable();
-}
-
-void TANK::TankClear(std::list<class TANK>::iterator ite_tank)
-{
-	DeleteTank(ite_tank);
-	TankClear(ite_tank);
 }
 
 void TANK::Shoot()
@@ -177,7 +174,7 @@ void TANK::ClearIterator(std::list<class TANK>::iterator ite_tank)
 	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
-			if (map[i][j].tank == ite_tank) map[i][j].tank = list_tank_null.end();
+			/*if (map[i][j].tank == ite_tank) */map[i][j].tank = list_tank_null.end();
 }
 
 void TANK::Flash()

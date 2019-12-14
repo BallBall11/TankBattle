@@ -7,10 +7,11 @@ extern std::list<class FLY>	list_fly_null;
 FLY_TYPE fly_type[MAX_FLY];
 
 FLY::FLY(
-	int Iid,
-	int Ix,
-	int Iy,
-	int Ifacing
+	int		Iid,
+	int		Ix,
+	int		Iy,
+	int		Ifacing,
+	bool	Bdisappearable
 )
 {
 	id = Iid;
@@ -23,7 +24,8 @@ FLY::FLY(
 
 	size_x = fly_type[id].size_x;
 	size_y = fly_type[id].size_y;
-	speed = fly_type[id].speed;
+	if (!Bdisappearable) speed = fly_type[id].speed;
+	else speed = -2;					//滞留一会儿
 	explosion_radium = fly_type[id].explosion_radium;
 }
 FLY::FLY()
@@ -35,20 +37,45 @@ FLY::FLY()
 
 void FLY::Turning(int position) { facing = position; }
 
+bool FLY::Clearable()
+{
+	return speed == 0;
+}
+
 void FLY::Move(std::list<class FLY>::iterator ite_fly)
 {
 	std::list<class FLY>::iterator fly_iterator;
 	fly_iterator = map[ChangeToScreen(x)][ChangeToScreen(y)].fly;
 	ClearIterator(ite_fly);
-	for (int i = 0; i < speed; i++)
+	switch (speed)
 	{
-		int t_x = x + dir[facing].x;
-		int t_y = y + dir[facing].y;
-		if (!CanStand(t_x, t_y)) break;
-		x = t_x;
-		y = t_y;
+	case -1:								//speed=-1启用瞬时的逻辑
+		speed = -2;
+		SetIterator(fly_iterator);
+		FillingFly();
+		break;
+	case -2:
+	case -3:
+	case -4:
+	case -5:
+		speed--;
+		break;
+	case -6:
+		speed = 0;
+		break;
+	case 0:									//speed=0代表马上消失
+		break;
+	default:
+		for (int i = 0; i < speed; i++)
+		{
+			int t_x = x + dir[facing].x;
+			int t_y = y + dir[facing].y;
+			if (!CanStand(t_x, t_y)) break;
+			x = t_x;
+			y = t_y;
+		}
+		SetIterator(fly_iterator);
 	}
-	SetIterator(fly_iterator);
 }
 
 bool FLY::CanStand(int x, int y)
@@ -65,19 +92,6 @@ bool FLY::CanStand(int x, int y)
 	return 1;
 }
 
-void FLY::FlyClear(std::list<class FLY>::iterator ite_fly)
-{
-	/*switch (facing) 
-	{
-	case DOWN: 
-	case UP: clearrectangle(x, y, x + size_y, y + size_x); break;
-	case RIGHT:
-	case LEFT:clearrectangle(x, y, x + size_x, y + size_y); break;
-	}*/
-	DeleteFly(ite_fly);
-	ClearIterator(ite_fly);
-}
-
 void FLY::Paint()
 {
 #define PI 3.14159265
@@ -86,20 +100,14 @@ void FLY::Paint()
 	switch (facing)
 	{
 	case UP:
+	case DOWN:
 		print_picture = picture;
 		print_cover = picture_cover;
 		break;
-	case DOWN:
-		rotateimage(&print_picture, &picture, PI, BLACK);
-		rotateimage(&print_cover, &picture_cover, PI, WHITE);
-		break;
 	case LEFT:
+	case RIGHT:
 		rotateimage(&print_picture, &picture, PI / 2, BLACK);
 		rotateimage(&print_cover, &picture_cover, PI / 2, WHITE);
-		break;
-	case RIGHT:
-		rotateimage(&print_picture, &picture, -PI / 2, BLACK);
-		rotateimage(&print_cover, &picture_cover, -PI / 2, WHITE);
 		break;
 	}
 	putimage(ScreenXPixel(x), ScreenYPixel(y), &print_cover, SRCAND);
@@ -132,5 +140,19 @@ void FLY::ClearIterator(std::list<class FLY>::iterator ite_fly)
 	int max_y = ChangeToScreen(y + size_y * BLOCK_SIZE - 1);
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
-			if (map[i][j].fly == ite_fly) map[i][j].fly = list_fly_null.end();
+			/*if (map[i][j].fly == ite_fly) */map[i][j].fly = list_fly_null.end();
+}
+
+void FLY::FillingFly()
+{
+	int add_x = dir[facing].x * size_x * BLOCK_SIZE;
+	int add_y = dir[facing].y * size_y * BLOCK_SIZE;
+	int t_x = x + add_x;
+	int t_y = y + add_y;
+	do
+	{
+		InsertFly(id, t_x, t_y, facing, true);
+		t_x += add_x;
+		t_y += add_y;
+	} while (CanStand(t_x, t_y));
 }
