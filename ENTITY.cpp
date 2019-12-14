@@ -4,9 +4,7 @@
 ENTITY_TYPE entity_type[MAX_ENTITY];
 extern std::list<class ENTITY> list_entity_null;
 
-void ENTITY::GetEntity(
-	std::list<TANK>::iterator tank,
-	std::list<class ENTITY>::iterator ite_entity)
+void ENTITY::GetEntity(std::list<TANK>::iterator tank)
 {
 	switch (type)
 	{
@@ -17,15 +15,15 @@ void ENTITY::GetEntity(
 		switch (id)
 		{
 		case HE_SMALL:
-			tank->Hurt(-SMALL_HEALING_BLOOD, tank);
+			tank->Hurt(-SMALL_HEALING_BLOOD);
 			break;
 		case HE_BIG:
-			tank->Hurt(-BIG_HEALING_BLOOD, tank);
+			tank->Hurt(-BIG_HEALING_BLOOD);
 			break;
 		}
 		break;
 	}
-	ClearIterator(ite_entity);
+	clearable = true;
 }
 
 ENTITY::ENTITY(
@@ -45,11 +43,6 @@ ENTITY::ENTITY()
 	type = -1;
 	x = 0;
 	y = 0;
-}
-
-void ENTITY::EntityClear()
-{
-	//clearrectangle(x, y, x + size_x, y + size_y);
 }
 
 int ENTITY::Getid() { return id; }
@@ -78,5 +71,5 @@ void ENTITY::ClearIterator(std::list<class ENTITY>::iterator ite_entity)
 	int max_y = ChangeToScreen(y + BLOCK_SIZE - 1);
 	for (int i = min_x; i <= max_x; i++)
 		for (int j = min_y; j <= max_y; j++)
-			if (map[i][j].entity == ite_entity) map[i][j].entity = list_entity_null.end();
+			/*if (map[i][j].entity == ite_entity) */map[i][j].entity = list_entity_null.end();
 }
