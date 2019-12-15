@@ -55,10 +55,7 @@ public:
 	TANK();
 	bool	CanStand(int x, int y);				//判断是否卡墙
 	void	Turning(int position);				//转向
-
-	int		Hurt(int hurt);
-
-												//受伤or回血
+	int		Hurt(int hurt);							//受伤or回血
 	void	Move(std::list<class TANK>::iterator ite_tank);	
 												//移动
 	int		Speed() { return speed; }			//获取速度（似乎没用...）
