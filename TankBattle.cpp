@@ -18,11 +18,7 @@
 using namespace std;
 int scr_x, scr_y;
 extern BLOCK block_type[MAX_BLOCK];
-extern std::list<class TANK>	list_tank;
-extern std::list<class FLY>		list_fly;
-extern std::list<class TANK>	list_tank_null;
-extern std::list<class ENTITY>	list_entity_null;
-extern std::list<class FLY>		list_fly_null;
+
 
 const int ENEMY_FLASH_TIME = 100;
 
@@ -43,6 +39,10 @@ void Begin();
 void GenerateEnemy();
 bool IsBase(int i, int j);
 void PaintBackground(int i, int j);
+
+void BlockCrash(BLOCK* block);
+void EnemyTankCrash(list<class TANK>::iterator enemy_tank);
+void ITankCrash(list<class TANK>::iterator i_tank);
 
 int main()
 {
@@ -91,7 +91,6 @@ int main()
 			Sleep(1000 / FPS - (mytime - starttime));
 		}
 		std::list<class TANK>::iterator me = list_tank.begin();
-		me++;
 		flash = DataChange(me);
 		if (flash)
 			Print();
@@ -196,29 +195,41 @@ bool DataChange(list<class TANK>::iterator me)
 		me->Shoot();
 		ans = 1;
 	}
+	me->Flash();
+	ITankCrash(me);
+
 	list<class FLY>::iterator it = list_fly.end();
 	it--;
 	for (; it != list_fly.begin(); it--)
 	{
 		it->Move(it);
+		int fly_x = it->Getx() / BLOCK_SIZE;
+		int fly_y = it->Gety() / BLOCK_SIZE;
+		BlockCrash(map[fly_x][fly_y].block);
 		if (it->Clearable())
 		{
 			it = DeleteFly(it);
 		}
 	}
-	me->Flash();
+
+	
 	{
 		GenerateEnemy();
 		list<class TANK>::iterator it = list_tank.begin();
-		it++; it++;
+		it++; 
 		for (; it != list_tank.end(); it++)
 		{
 			it->Move(it);
 			if(rand()%5==0)
 				it->Turning(rand() % 4);
+			EnemyTankCrash(it);
+			if (rand() % 3 == 0)
+				it->Shoot();
 			it->Flash();
 		}
 	}
+
+
 	return 1;
 }
 
