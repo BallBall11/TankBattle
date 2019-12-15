@@ -2,7 +2,7 @@
 #ifndef BASIC_DEFINE_INCLUDED
 #define BASIC_DEFINE_INCLUDED
 
-#define MAX_MAP 100		//地图尺寸
+#define MAX_MAP 47		//地图尺寸
 #define WIN_COL 30		//窗口行数
 #define WIN_ROW 30		//窗口列数
 #define FPS 10			//屏幕刷新率
