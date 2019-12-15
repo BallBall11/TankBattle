@@ -8,18 +8,20 @@
 class FLY
 {
 private:
-	IMAGE	picture;			//×Óµ¯µÄÌùÍ¼
-	IMAGE	picture_cover;		//ÑÚÍ¼
-	int		id;					//×Óµ¯µÄID
-	int		x;					//×Óµ¯µÄx×ø±ê(ÏñËØ×ø±ê)
-	int		y;					//×Óµ¯µÄy×ø±ê(ÏñËØ×ø±ê)
-	int		size_x;				//×Óµ¯µÄx´óĞ¡
-	int		size_y;				//×Óµ¯µÄy´óĞ¡
-	int		facing;				//×Óµ¯µÄ³¯Ïò
-	int		speed;				//×Óµ¯µÄËÙ¶È
-	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶
-	void	FillingFly();		//×¨ÃÅÕë¶Ô¼¤¹âµÄMoveº¯ÊıµÄ¸¨Öúº¯Êı
-	bool	from_i;				//×Óµ¯ÊÇ·ñÀ´×ÔÎÒµÄÌ¹¿Ë
+	IMAGE	picture;			//å­å¼¹çš„è´´å›¾
+	IMAGE	picture_cover;		//æ©å›¾
+	int		id;					//å­å¼¹çš„ID
+	int		x;					//å­å¼¹çš„xåæ ‡(åƒç´ åæ ‡)
+	int		y;					//å­å¼¹çš„yåæ ‡(åƒç´ åæ ‡)
+	int		size_x;				//å­å¼¹çš„xå¤§å°
+	int		size_y;				//å­å¼¹çš„yå¤§å°
+	int		facing;				//å­å¼¹çš„æœå‘
+	int		speed;				//å­å¼¹çš„é€Ÿåº¦
+	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„
+	void	FillingFly();		//ä¸“é—¨é’ˆå¯¹æ¿€å…‰çš„Moveå‡½æ•°çš„è¾…åŠ©å‡½æ•°
+
+	bool	from_i;				//å­å¼¹æ˜¯å¦æ¥è‡ªæˆ‘çš„å¦å…‹
+
 public:
 	FLY(
 		int		Iid,
@@ -28,34 +30,34 @@ public:
 		int		Ifacing,
 		bool	Bdisappearable = false);
 	FLY();
-	bool	CanStand(int x, int y);						//ÊÇ·ñ¿¨Ç½
-	void	Turning(int position);						//×ªÏò
+	bool	CanStand(int x, int y);						//æ˜¯å¦å¡å¢™
+	void	Turning(int position);						//è½¬å‘
 	void	Move(std::list<class FLY>::iterator ite_fly);
-														//ÒÆ¶¯
-	void	Paint();									//»æÍ¼
-	bool	Clearable();								//ÊÇ·ñ¿ÉÇå³ı
+														//ç§»åŠ¨
+	void	Paint();									//ç»˜å›¾
+	bool	Clearable();								//æ˜¯å¦å¯æ¸…é™¤
 
 	int		Getx();
-	int		Gety();										//×óÉÏ×ø±êµÄx,yÖµ
+	int		Gety();										//å·¦ä¸Šåæ ‡çš„x,yå€¼
 	int		GetxEnd();
-	int		GetyEnd();									//ÓÒÏÂ×ø±êµÄx,yÖµ
-	int		Getid();									//»ñÈ¡×Óµ¯id
-	int		Getfacing();								//»ñÈ¡×Óµ¯·½Ïò
-	bool	IsAlive();									//×Óµ¯ÊÇ·ñ´æÔÚ
+	int		GetyEnd();									//å³ä¸‹åæ ‡çš„x,yå€¼
+	int		Getid();									//è·å–å­å¼¹id
+	int		Getfacing();								//è·å–å­å¼¹æ–¹å‘
+	bool	IsAlive();									//å­å¼¹æ˜¯å¦å­˜åœ¨
 	bool	IsFromI();
 	void	SetIterator(std::list<class FLY>::iterator ite_fly);
 	void	ClearIterator(std::list<class FLY>::iterator ite_fly);
-														//¸üĞÂmap
+														//æ›´æ–°map
 };
 
 struct FLY_TYPE
 {
-	IMAGE	picture;			//×Óµ¯ÌùÍ¼
-	IMAGE	picture_cover;		//ÑÚÌå
-	int		size_x;				//×Óµ¯µÄx´óĞ¡
-	int		size_y;				//×Óµ¯µÄy´óĞ¡
-	int		speed;				//×Óµ¯µÄËÙ¶È
-	int		explosion_radium;	//×Óµ¯µÄ±¬ÆÆ°ë¾¶			
+	IMAGE	picture;			//å­å¼¹è´´å›¾
+	IMAGE	picture_cover;		//æ©ä½“
+	int		size_x;				//å­å¼¹çš„xå¤§å°
+	int		size_y;				//å­å¼¹çš„yå¤§å°
+	int		speed;				//å­å¼¹çš„é€Ÿåº¦
+	int		explosion_radium;	//å­å¼¹çš„çˆ†ç ´åŠå¾„			
 	FLY_TYPE(
 		LPCTSTR	Lpicture,
 		LPCTSTR Lpicture_cover,

@@ -30,20 +30,22 @@ enum Direction_Cannot_Go {
 class TANK
 {
 private:
-	IMAGE	picture;			//Ì¹¿ËµÄÌùÍ¼
-	IMAGE	picture_cover;		//ÑÚÍ¼
-	int		id;					//Ì¹¿ËµÄID
-	int		x;					//Ì¹¿ËµÄx×ø±ê(ÏñËØ×ø±ê)
-	int		y;					//Ì¹¿ËµÄy×ø±ê(ÏñËØ×ø±ê)
-	int		size_x;				//Ì¹¿ËµÄx´óĞ¡
-	int		size_y;				//Ì¹¿ËµÄy´óĞ¡
-	int		facing;				//Ì¹¿ËµÄ³¯Ïò
-	int		weapon_id;			//Ì¹¿ËµÄÎäÆ÷ID
-	int		blood;				//Ì¹¿ËµÄÑªÁ¿
-	int		speed = 1;			//Ì¹¿ËµÄËÙ¶È
-	int		cold_time = 0;		//ÎäÆ÷ÀäÈ´Ê±¼ä£¬ÎªÁã¿ÉÒÔ¹¥»÷
-	int		use_times = -1;		//ÎäÆ÷Ê¹ÓÃ´ÎÊı£¬Îª-1±íÊ¾ÎŞÏŞÊ¹ÓÃ
-	bool	cannot_go[4] = { 0 };	//Ì¹¿ËÄÄ¸ö·½Ïò²»ÄÜ×ß£¬ÖµÎª1´ú±í²»ÄÜ×ß
+	IMAGE	picture;			//å¦å…‹çš„è´´å›¾
+	IMAGE	picture_cover;		//æ©å›¾
+	int		id;					//å¦å…‹çš„ID
+	int		x;					//å¦å…‹çš„xåæ ‡(åƒç´ åæ ‡)
+	int		y;					//å¦å…‹çš„yåæ ‡(åƒç´ åæ ‡)
+	int		size_x;				//å¦å…‹çš„xå¤§å°
+	int		size_y;				//å¦å…‹çš„yå¤§å°
+	int		facing;				//å¦å…‹çš„æœå‘
+	int		weapon_id;			//å¦å…‹çš„æ­¦å™¨ID
+	int		blood;				//å¦å…‹çš„è¡€é‡
+	int		speed = 1;			//å¦å…‹çš„é€Ÿåº¦
+	int		cold_time = 0;		//æ­¦å™¨å†·å´æ—¶é—´ï¼Œä¸ºé›¶å¯ä»¥æ”»å‡»
+	int		use_times = -1;		//æ­¦å™¨ä½¿ç”¨æ¬¡æ•°ï¼Œä¸º-1è¡¨ç¤ºæ— é™ä½¿ç”¨
+
+	bool	cannot_go[4] = { 0 };	//å¦å…‹å“ªä¸ªæ–¹å‘ä¸èƒ½èµ°ï¼Œå€¼ä¸º1ä»£è¡¨ä¸èƒ½èµ°
+
 public:
 	TANK(
 		int Iid,
@@ -51,41 +53,43 @@ public:
 		int Iy,
 		int Ifacing);
 	TANK();
-	bool	CanStand(int x, int y);				//ÅĞ¶ÏÊÇ·ñ¿¨Ç½
-	void	Turning(int position);				//×ªÏò
-	int		Hurt(int hurt);
-												//ÊÜÉËor»ØÑª
-	void	Move(std::list<class TANK>::iterator ite_tank);	
-												//ÒÆ¶¯
-	int		Speed() { return speed; }			//»ñÈ¡ËÙ¶È£¨ËÆºõÃ»ÓÃ...£©
-	bool	CanMove();							//ÓĞÎÊÌâ
-	void 	Paint();							//Êä³ö
-	bool	Clearable();						//ÊÇ·ñ¿ÉÇå³ı
+	bool	CanStand(int x, int y);				//åˆ¤æ–­æ˜¯å¦å¡å¢™
+	void	Turning(int position);				//è½¬å‘
 
-	void	Shoot();							//Éä»÷
-	void	Flash();							//Ã¿Ö¡¸üĞÂÊı¾İ
-	bool	CanShoot();							//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔÉä»÷
+	int		Hurt(int hurt);
+
+												//å—ä¼¤orå›è¡€
+	void	Move(std::list<class TANK>::iterator ite_tank);	
+												//ç§»åŠ¨
+	int		Speed() { return speed; }			//è·å–é€Ÿåº¦ï¼ˆä¼¼ä¹æ²¡ç”¨...ï¼‰
+	bool	CanMove();							//æœ‰é—®é¢˜
+	void 	Paint();							//è¾“å‡º
+	bool	Clearable();						//æ˜¯å¦å¯æ¸…é™¤
+
+	void	Shoot();							//å°„å‡»
+	void	Flash();							//æ¯å¸§æ›´æ–°æ•°æ®
+	bool	CanShoot();							//åˆ¤æ–­æ˜¯å¦å¯ä»¥å°„å‡»
 	int		Getx();
-	int		Gety();								//×óÉÏ×ø±êµÄx,yÖµ
+	int		Gety();								//å·¦ä¸Šåæ ‡çš„x,yå€¼
 	int		GetxEnd();
-	int		GetyEnd();							//ÓÒÏÂ×ø±êµÄx,yÖµ
-	int		Getfacing();						//»ñÈ¡Ì¹¿Ë·½Ïò
-	void	ChangeWeapon(int new_weapon_id);	//»»ÎäÆ÷
-	void	ChangeCannotGo(int new_cannot_go);	//¸üĞÂ²»ÄÜ×ßµÄ·½Ïò
-	void	ChangeCanGo(int new_can_go);		//¸üĞÂÄÜ×ßµÄ·½Ïò
+	int		GetyEnd();							//å³ä¸‹åæ ‡çš„x,yå€¼
+	int		Getfacing();						//è·å–å¦å…‹æ–¹å‘
+	void	ChangeWeapon(int new_weapon_id);	//æ¢æ­¦å™¨
+	void	ChangeCannotGo(int new_cannot_go);	//æ›´æ–°ä¸èƒ½èµ°çš„æ–¹å‘
+	void	ChangeCanGo(int new_can_go);		//æ›´æ–°èƒ½èµ°çš„æ–¹å‘
 	void	SetIterator(std::list<class TANK>::iterator ite_tank);
 	void	ClearIterator(std::list<class TANK>::iterator ite_tank);
-												//¸üĞÂmap
+												//æ›´æ–°map
 };
 
 struct TANK_TYPE
 {
-	IMAGE	picture;			//Ì¹¿ËÌùÍ¼
-	IMAGE	picture_cover;		//ÑÚÍ¼
-	int		size_x;				//Ì¹¿ËµÄx´óĞ¡
-	int		size_y;				//Ì¹¿ËµÄy´óĞ¡
-	int		blood;				//Ì¹¿ËµÄÑªÁ¿
-	int		speed;				//Ì¹¿ËµÄËÙ¶È
+	IMAGE	picture;			//å¦å…‹è´´å›¾
+	IMAGE	picture_cover;		//æ©å›¾
+	int		size_x;				//å¦å…‹çš„xå¤§å°
+	int		size_y;				//å¦å…‹çš„yå¤§å°
+	int		blood;				//å¦å…‹çš„è¡€é‡
+	int		speed;				//å¦å…‹çš„é€Ÿåº¦
 	TANK_TYPE(
 		LPCTSTR	Lpicture,
 		LPCTSTR	Lpicture_cover,
