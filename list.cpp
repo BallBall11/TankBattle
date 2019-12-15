@@ -7,7 +7,7 @@ std::list<class TANK>		list_tank_null;
 std::list<class ENTITY>		list_entity_null;
 std::list<class FLY>		list_fly_null;
 
-void list_setup()			//请务必事先调用这个函数,建立链表用
+void ListSetup()			//请务必事先调用这个函数,建立链表用
 {
 	list_tank.resize(1);
 	list_entity.resize(1);

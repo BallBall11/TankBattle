@@ -2,13 +2,13 @@
 #ifndef BASIC_DEFINE_INCLUDED
 #define BASIC_DEFINE_INCLUDED
 
-#define MAX_MAP 100		//µØÍ¼³ß´ç
-#define WIN_COL 30		//´°¿ÚĞĞÊı
-#define WIN_ROW 30		//´°¿ÚÁĞÊı
-#define FPS 10			//ÆÁÄ»Ë¢ĞÂÂÊ
+#define MAX_MAP 100		//åœ°å›¾å°ºå¯¸
+#define WIN_COL 30		//çª—å£è¡Œæ•°
+#define WIN_ROW 30		//çª—å£åˆ—æ•°
+#define FPS 10			//å±å¹•åˆ·æ–°ç‡
 
 #define BLOCK_SIZE 16
-//Ò»¸ö¸ñ×ÓµÄÏñËØ¿í¶È
+//ä¸€ä¸ªæ ¼å­çš„åƒç´ å®½åº¦
 
 #include <graphics.h>
 #include <list>
@@ -31,7 +31,15 @@ struct CELL
 	std::list<class FLY>::iterator fly;
 };
 
-extern DIRECTION dir[4];	//·½ÏòÊı×é
+void InsertTank(int id, int x, int y, int facing);
+void InsertEntity(int id, int type, int x, int y);
+void InsertFly(int id, int x, int y, int facing, bool disappearable = false);
+
+std::list<class TANK>::iterator		DeleteTank(std::list<class TANK>	::iterator	tank_iterator);
+std::list<class ENTITY>::iterator	DeleteEntity(std::list<class ENTITY>	::iterator	entity_iterator);
+std::list<class FLY>::iterator		DeleteFly(std::list<class FLY>	::iterator	fly_iterator);
+
+extern DIRECTION dir[4];	//æ–¹å‘æ•°ç»„
 extern CELL map[MAX_MAP][MAX_MAP];
 extern DWORD starttime;
 extern DWORD START;
@@ -40,7 +48,7 @@ extern BLOCK block_type[MAX_BLOCK];
 int	ChangeToScreen(int x);
 int ChangeToPixel(int x);
 
-void Gotoxy(int x, int y);	//ÆÁÄ»x×ø±êÎªÁĞ×ø±ê£¬y×ø±êÎªĞĞ×ø±ê
+void Gotoxy(int x, int y);	//å±å¹•xåæ ‡ä¸ºåˆ—åæ ‡ï¼Œyåæ ‡ä¸ºè¡Œåæ ‡
 
 int Tick(int interVal);
 
@@ -52,13 +60,16 @@ void Win();
 
 void ChangeMap(int i, int j, int B_ID);
 
-int ScreenX(int x);					//·µ»Ø¸ñµã×óÉÏ½ÇX×ø±ê
-int ScreenY(int y);					//·µ»Ø¸ñµã×óÉÏ½ÇY×ø±ê
+int ScreenX(int x);					//è¿”å›æ ¼ç‚¹å·¦ä¸Šè§’Xåæ ‡
+int ScreenY(int y);					//è¿”å›æ ¼ç‚¹å·¦ä¸Šè§’Yåæ ‡
 int ScreenXPixel(int x);
 int ScreenYPixel(int y);
 
 void LoadResources();
 
-void list_setup();
+
+void ListSetup();
+void LoadMap(const char *way);
+
 
 #endif

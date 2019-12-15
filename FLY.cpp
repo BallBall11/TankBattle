@@ -25,7 +25,7 @@ FLY::FLY(
 	size_x = fly_type[id].size_x;
 	size_y = fly_type[id].size_y;
 	if (!Bdisappearable) speed = fly_type[id].speed;
-	else speed = -2;					//滞留一会儿
+	else speed = -2;					//婊炵暀涓�浼氬効
 	explosion_radium = fly_type[id].explosion_radium;
 }
 FLY::FLY()
@@ -49,7 +49,7 @@ void FLY::Move(std::list<class FLY>::iterator ite_fly)
 	ClearIterator(ite_fly);
 	switch (speed)
 	{
-	case -1:								//speed=-1启用瞬时的逻辑
+	case -1:								//speed=-1鍚敤鐬椂鐨勯�昏緫
 		speed = -2;
 		SetIterator(fly_iterator);
 		FillingFly();
@@ -63,7 +63,7 @@ void FLY::Move(std::list<class FLY>::iterator ite_fly)
 	case -6:
 		speed = 0;
 		break;
-	case 0:									//speed=0代表马上消失
+	case 0:									//speed=0浠ｈ〃椹笂娑堝け
 		break;
 	default:
 		for (int i = 0; i < speed; i++)
@@ -120,6 +120,9 @@ int FLY::Gety() { return y; }
 int FLY::GetxEnd() { return x + size_x; }
 int FLY::GetyEnd() { return y + size_y; }
 int FLY::Getid() { return id; }
+int FLY::Getfacing() { return facing; }
+bool FLY::IsAlive() { return speed > 0; }
+bool FLY::IsFromI() { return from_i; }
 
 void FLY::SetIterator(std::list<class FLY>::iterator ite_fly)
 {
@@ -147,6 +150,7 @@ void FLY::FillingFly()
 {
 	int add_x = dir[facing].x * size_x * BLOCK_SIZE;
 	int add_y = dir[facing].y * size_y * BLOCK_SIZE;
+
 	int t_x = x + add_x;
 	int t_y = y + add_y;
 	do
@@ -154,5 +158,6 @@ void FLY::FillingFly()
 		InsertFly(id, t_x, t_y, facing, true);
 		t_x += add_x;
 		t_y += add_y;
+
 	} while (CanStand(t_x, t_y));
 }

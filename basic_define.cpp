@@ -1,4 +1,6 @@
 #include "basic_define.h"
+#include <iostream>
+#include <fstream>
 #include <cstdio>
 #include <cstdlib>
 #include <easyx.h>
@@ -30,7 +32,7 @@ int ChangeToPixel(int x) { return x * BLOCK_SIZE; }
 void End() 
 {
 	cleardevice();
-	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("ÓÎÏ·½áÊø"));
+	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("æ¸¸æˆç»“æŸ"));
 	_getch();
 }
 
@@ -78,40 +80,61 @@ int ScreenYPixel(int y)
 
 void LoadResources()
 {
-	block_type[0] = BLOCK(_T("resources\\block\\Â·.gif"),  _T("resources\\block\\mask.gif"),		B_SPACE,	1, 1, 0, 0, 0, false, true , false);
-	block_type[1] = BLOCK(_T("resources\\block\\Ç½1.gif"), _T("resources\\block\\mask.gif"),		B_ONE,		1, 1, 0, 0, 0, false, false, false);
-	block_type[2] = BLOCK(_T("resources\\block\\Ç½2.gif"), _T("resources\\block\\mask.gif"),		B_TWO,		1, 1, 0, 0, 1, false, false, false);
-	block_type[3] = BLOCK(_T("resources\\block\\Ç½3.gif"), _T("resources\\block\\mask.gif"),		B_THREE,	1, 1, 0, 0, 2, false, false, false);
-	block_type[4] = BLOCK(_T("resources\\block\\Ç½4.gif"), _T("resources\\block\\mask.gif"),		B_FOUR,		1, 1, 0, 0, 3, false, false, false);
-	block_type[5] = BLOCK(_T("resources\\block\\Ç½5.gif"), _T("resources\\block\\mask.gif"),		B_FIVE,		1, 1, 0, 0, 4, false, false, false);
+	block_type[0] = BLOCK(_T("resources\\block\\è·¯.gif"),  _T("resources\\block\\mask.gif"),		B_SPACE,	1, 1, 0, 0, 0, false, true , false);
+	block_type[1] = BLOCK(_T("resources\\block\\å¢™1.gif"), _T("resources\\block\\mask.gif"),		B_ONE,		1, 1, 0, 0, 0, false, false, false);
+	block_type[2] = BLOCK(_T("resources\\block\\å¢™2.gif"), _T("resources\\block\\mask.gif"),		B_TWO,		1, 1, 0, 0, 1, false, false, false);
+	block_type[3] = BLOCK(_T("resources\\block\\å¢™3.gif"), _T("resources\\block\\mask.gif"),		B_THREE,	1, 1, 0, 0, 2, false, false, false);
+	block_type[4] = BLOCK(_T("resources\\block\\å¢™4.gif"), _T("resources\\block\\mask.gif"),		B_FOUR,		1, 1, 0, 0, 3, false, false, false);
+	block_type[5] = BLOCK(_T("resources\\block\\å¢™5.gif"), _T("resources\\block\\mask.gif"),		B_FIVE,		1, 1, 0, 0, 4, false, false, false);
 	block_type[6] = BLOCK(_T("resources\\block\\TNT.gif"), _T("resources\\block\\mask.gif"),		B_TNT,		1, 1, 3, 5, 0, true , false, false);
-	block_type[7] = BLOCK(_T("resources\\block\\»ùÑÒ.gif"),_T("resources\\block\\mask.gif"),		B_BEDROCK,	1, 1, 0, 0, 7, false, false, false);
-	block_type[8] = BLOCK(_T("resources\\block\\ÑÚÌå.gif"),_T("resources\\block\\ÑÚÌå_mask.gif"),	B_SHIELD,	1, 1, 0, 0, 0, false, true , true );
-	block_type[9] = BLOCK(_T("resources\\block\\»ùµØ.gif"),_T("resources\\block\\mask.gif"),		B_BASEMENT, 1, 1, 0, 0, 0, false, false, false);
+	block_type[7] = BLOCK(_T("resources\\block\\åŸºå²©.gif"),_T("resources\\block\\mask.gif"),		B_BEDROCK,	1, 1, 0, 0, 7, false, false, false);
+	block_type[8] = BLOCK(_T("resources\\block\\æŽ©ä½“.gif"),_T("resources\\block\\æŽ©ä½“_mask.gif"),	B_SHIELD,	1, 1, 0, 0, 0, false, true , true );
+	block_type[9] = BLOCK(_T("resources\\block\\åŸºåœ°.gif"),_T("resources\\block\\mask.gif"),		B_BASEMENT, 1, 1, 0, 0, 0, false, false, false);
+
 	////////////////
-	tank_type[0] = TANK_TYPE(_T("resources\\tank\\¼º·½Ì¹¿Ë.gif"), _T("resources\\tank\\¼º·½Ì¹¿Ë_mask.gif"), 3, 3, 1, 2);
-	tank_type[1] = TANK_TYPE(_T("resources\\tank\\µÐ·½Ì¹¿Ë.gif"), _T("resources\\tank\\µÐ·½Ì¹¿Ë_mask.gif"), 3, 3, 1, 2);
+	tank_type[0] = TANK_TYPE(_T("resources\\tank\\å·±æ–¹å¦å…‹.gif"), _T("resources\\tank\\å·±æ–¹å¦å…‹_mask.gif"), 3, 3, 1, 2);
+	tank_type[1] = TANK_TYPE(_T("resources\\tank\\æ•Œæ–¹å¦å…‹.gif"), _T("resources\\tank\\æ•Œæ–¹å¦å…‹_mask.gif"), 3, 3, 1, 2);
 	////////////////
-	fly_type[0] = FLY_TYPE(_T("resources\\fly\\ÆÕÍ¨.gif"), _T("resources\\fly\\ÆÕÍ¨_mask.gif"), 1, 1, 5, 0);
-	fly_type[1] = FLY_TYPE(_T("resources\\fly\\±¬ÆÆ.gif"), _T("resources\\fly\\±¬ÆÆ_mask.gif"), 1, 1, 3, 1);
-	fly_type[2] = FLY_TYPE(_T("resources\\fly\\¼¤¹â.gif"), _T("resources\\fly\\¼¤¹â_mask.gif"), 1, 1, -1, 0);	//-1±íÊ¾Ë²Ê±
+	fly_type[0] = FLY_TYPE(_T("resources\\fly\\æ™®é€š.gif"), _T("resources\\fly\\æ™®é€š_mask.gif"), 1, 1, 5, 0);
+	fly_type[1] = FLY_TYPE(_T("resources\\fly\\çˆ†ç ´.gif"), _T("resources\\fly\\çˆ†ç ´_mask.gif"), 1, 1, 3, 1);
+	fly_type[2] = FLY_TYPE(_T("resources\\fly\\æ¿€å…‰.gif"), _T("resources\\fly\\æ¿€å…‰_mask.gif"), 1, 1, -1, 0);	//-1è¡¨ç¤ºçž¬æ—¶
 	////////////////
 	////////////////
 	weapon_data[0] = WEAPON_DATA(-1, 40, 1);
 	weapon_data[1] = WEAPON_DATA(5, 80, 2);
 	weapon_data[2] = WEAPON_DATA(3, 80, 1);
 
-	list_setup();
+
+	ListSetup();
 }
 
 void Lose() {
 	cleardevice();
-	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("ÄãÊäÁË£¡"));
+	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("ä½ è¾“äº†ï¼"));
 	_getch();
 }
 
 void Win() {
 	cleardevice();
-	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("ÄãÓ®ÁË£¡"));
+	outtextxy(((WIN_COL + 20) / 2 - 2) * BLOCK_SIZE, (WIN_ROW / 3) * BLOCK_SIZE, _T("ä½ èµ¢äº†ï¼"));
 	_getch();
+}
+
+void LoadMap(const char* way)
+{
+	std::ifstream fp;
+	fp.open(way, std::ios::in);
+	int x, y, max_basement;
+	fp >> y >> x >> max_basement;
+	for (int i = 0; i < x; i++)
+		for (int j = 0; j < y; j++)
+		{
+			int block_id;
+			fp >> block_id;
+			map[j][i].block = &block_type[block_id];
+			map[j][i].entity = list_entity_null.end();
+			map[j][i].fly = list_fly_null.end();
+			map[j][i].tank = list_tank_null.end();
+		}
+	fp.close();
 }

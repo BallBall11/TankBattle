@@ -52,8 +52,8 @@ void BLOCK::BlockClear(int x, int y)
 		(y + size_y) * BLOCK_SIZE);
 }
 
-int BLOCK::Getx(int x) { return x * BLOCK_SIZE; }
-int BLOCK::Gety(int y) { return y * BLOCK_SIZE; }
-int BLOCK::GetxEnd(int x) { return (x + size_x) * BLOCK_SIZE; }
-int BLOCK::GetyEnd(int y) { return (y + size_y) * BLOCK_SIZE; }
+int BLOCK::Getx() { return x; }
+int BLOCK::Gety() { return y; }
+int BLOCK::GetxEnd() { return x + size_x; }
+int BLOCK::GetyEnd() { return y + size_y; }
 int	BLOCK::Getid() { return id; }

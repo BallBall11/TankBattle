@@ -25,6 +25,8 @@ private:
 	IMAGE	picture;
 	IMAGE	picture_cover;
 	int		id;							//方块ID
+	int		x;							//方块x格点坐标
+	int		y;							//方块y格点坐标
 	int		size_x;						//x坐标大小
 	int		size_y;						//y坐标大小
 	int		explosion_radium;			//爆炸半径
@@ -42,10 +44,10 @@ public:
 	bool	IsPassable();										//方块是否可通过
 	bool	IsCover() { return is_cover; }						//方块是否是掩体
 	void	Paint(int x, int y);								//绘图
-	int		Getx(int x);
-	int		Gety(int y);										//左上坐标的x,y值
-	int		GetxEnd(int x);
-	int		GetyEnd(int y);										//右下坐标的x,y值
+	int		Getx();
+	int		Gety();												//左上坐标的x,y值
+	int		GetxEnd();
+	int		GetyEnd();											//右下坐标的x,y值
 	int		Getid();											//获取方块id
 	void	BlockClear(int x, int y);							//似乎没用...
 
