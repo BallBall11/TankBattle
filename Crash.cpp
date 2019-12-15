@@ -1,26 +1,23 @@
 #include "basic_define.h"
 using namespace std;
 
-    void ITankCrash(list<class TANK>::iterator i_tank) { //ÎÒµÄÌ¹¿ËÅöµ½×Óµ¯»ò·½¿é
+void ITankCrash(list<class TANK>::iterator i_tank) { //ÎÒµÄÌ¹¿ËÅöµ½×Óµ¯»ò·½¿é
 	int cell_x = i_tank->Getx() / BLOCK_SIZE, cell_y = i_tank->Gety() / BLOCK_SIZE;
 	int cell_xe = i_tank->GetxEnd() / BLOCK_SIZE, cell_ye = i_tank->GetyEnd() / BLOCK_SIZE;
 	int i;
 	for (i = 0; i < cell_xe - cell_x; i++) {
 		if (IsInMap(cell_x - 1, cell_y + i))
 		{
-			if (map[cell_x - 1][cell_y + i].fly != list_fly_null.end())
-				if (map[cell_x - 1][cell_y + i].fly->IsAlive()
-					&& map[cell_x - 1][cell_y + i].fly->Getfacing() == RIGHT)
-				{
-					std::list<FLY>::iterator it = map[cell_x - 1][cell_y + i].fly;
-					map[cell_x - 1][cell_y + i].fly->ClearIterator(map[cell_x - 1][cell_y].fly);
-					list_fly.erase(it);
-					if (!(i_tank->Hurt(1))) {
-						DeleteTank(i_tank);
-						Lose();
-					}
-
+			if (map[cell_x - 1][cell_y + i].fly != list_fly_null.end()
+				&& map[cell_x - 1][cell_y + i].fly->IsAlive()
+				&& map[cell_x - 1][cell_y + i].fly->Getfacing() == RIGHT)
+			{
+				DeleteFly(map[cell_x - 1][cell_y + i].fly);
+				if (!(i_tank->Hurt(1))) {
+					DeleteTank(i_tank);
+					Lose();
 				}
+			}
 			if (map[cell_x - 1][cell_y + i].block->Getid() && i_tank->Getfacing() == LEFT)
 			{
 				switch (map[cell_x - 1][cell_y + i].block->Getid())
@@ -44,18 +41,16 @@ using namespace std;
 		}
  		if (IsInMap(cell_x + 1, cell_y + i))
 		{
-			if (map[cell_x + 1][cell_y + i].fly != list_fly_null.end())
-				if (map[cell_x + 1][cell_y + i].fly->IsAlive()
-					&& map[cell_x + 1][cell_y + i].fly->Getfacing() == LEFT)
-				{
-					std::list<FLY>::iterator it = map[cell_x + 1][cell_y + i].fly;
-					map[cell_x + 1][cell_y + i].fly->ClearIterator(map[cell_x + 1][cell_y + i].fly);
-					list_fly.erase(it);
-					if (!(i_tank->Hurt(1))) {
-						DeleteTank(i_tank);
-						Lose();
-					}
+			if (map[cell_x + 1][cell_y + i].fly != list_fly_null.end()
+				&& map[cell_x + 1][cell_y + i].fly->IsAlive()
+				&& map[cell_x + 1][cell_y + i].fly->Getfacing() == LEFT)
+			{
+				DeleteFly(map[cell_x + 1][cell_y + i].fly);
+				if (!(i_tank->Hurt(1))) {
+					DeleteTank(i_tank);
+					Lose();
 				}
+			}
 			if (map[cell_x + 1][cell_y + i].block->Getid() && i_tank->Getfacing() == RIGHT)
 			{
 				switch (map[cell_x + 1][cell_y + i].block->Getid())
@@ -81,18 +76,16 @@ using namespace std;
 	for (i = 0; i < cell_ye - cell_y; i++) {
 		if (IsInMap(cell_x + i, cell_y - 1))
 		{
-			if (map[cell_x + i][cell_y - 1].fly != list_fly_null.end())
-				if (map[cell_x + i][cell_y - 1].fly->IsAlive()
-					&& map[cell_x + i][cell_y - 1].fly->Getfacing() == DOWN)
-				{
-					std::list<FLY>::iterator it = map[cell_x + i][cell_y - 1].fly;
-					map[cell_x + i][cell_y - 1].fly->ClearIterator(map[cell_x + i][cell_y - 1].fly);
-					list_fly.erase(it);
-					if (!(i_tank->Hurt(1))) {
-						DeleteTank(i_tank);
-						Lose();
-					}
+			if (map[cell_x + i][cell_y - 1].fly != list_fly_null.end()
+				&& map[cell_x + i][cell_y - 1].fly->IsAlive()
+				&& map[cell_x + i][cell_y - 1].fly->Getfacing() == DOWN)
+			{
+				DeleteFly(map[cell_x + i][cell_y - 1].fly);
+				if (!(i_tank->Hurt(1))) {
+					DeleteTank(i_tank);
+					Lose();
 				}
+			}
 			if (map[cell_x + i][cell_y - 1].block->Getid() && i_tank->Getfacing() == UP)
 			{
 				switch (map[cell_x + i][cell_y - 1].block->Getid())
@@ -116,18 +109,16 @@ using namespace std;
 		}
   		if (IsInMap(cell_x + i, cell_y + 1))
 		{
-			if (map[cell_x + i][cell_y + 1].fly != list_fly_null.end())
-				if (map[cell_x + i][cell_y + 1].fly->IsAlive()
-					&& map[cell_x + i][cell_y + 1].fly->Getfacing() == UP)
-				{
-					std::list<FLY>::iterator it = map[cell_x + i][cell_y + 1].fly;
-					map[cell_x + i][cell_y + 1].fly->ClearIterator(map[cell_x + i][cell_y + 1].fly);
-					list_fly.erase(it);
-					if (!(i_tank->Hurt(1))) {
-						DeleteTank(i_tank);
-						Lose();
-					}
+			if (map[cell_x + i][cell_y + 1].fly != list_fly_null.end()
+				&& map[cell_x + i][cell_y + 1].fly->IsAlive()
+				&& map[cell_x + i][cell_y + 1].fly->Getfacing() == UP)
+			{
+				DeleteFly(map[cell_x + i][cell_y + 1].fly);
+				if (!(i_tank->Hurt(1))) {
+					DeleteTank(i_tank);
+					Lose();
 				}
+			}
 			if (map[cell_x + i][cell_y + 1].block->Getid() && i_tank->Getfacing() == DOWN)
 			{
 				switch (map[cell_x + i][cell_y + 1].block->Getid())
@@ -159,23 +150,21 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 	for (i = 0; i < cell_xe - cell_x; i++) {
 		if (IsInMap(cell_x - 1, cell_y + i))
 		{
-			if (map[cell_x - 1][cell_y + i].fly != list_fly_null.end())
-				if (map[cell_x - 1][cell_y + i].fly->IsAlive()
-					&& map[cell_x - 1][cell_y + i].fly->Getfacing() == RIGHT)
+			if (map[cell_x - 1][cell_y + i].fly != list_fly_null.end()
+				&& map[cell_x - 1][cell_y + i].fly->IsAlive()
+				&& map[cell_x - 1][cell_y + i].fly->Getfacing() == RIGHT)
+			{
+				switch (map[cell_x - 1][cell_y + i].fly->Getid())
 				{
-					switch (map[cell_x - 1][cell_y + i].fly->Getid())
-					{
-					case WE_EXPLOSION: DeleteTank(enemy_tank); break;
-					case WE_LASER:
-						if (!(enemy_tank->Hurt(2))) DeleteTank(enemy_tank);
-						break;
-					case WE_BASIC:
-						if (!(enemy_tank->Hurt(1))) DeleteTank(enemy_tank);
-					}
-					std::list<FLY>::iterator it = map[cell_x - 1][cell_y + i].fly;
-					map[cell_x - 1][cell_y + i].fly->ClearIterator(map[cell_x - 1][cell_y + i].fly);
-					list_fly.erase(it);
+				case WE_EXPLOSION: DeleteTank(enemy_tank); break;
+				case WE_LASER:
+					if (!(enemy_tank->Hurt(2))) DeleteTank(enemy_tank);
+					break;
+				case WE_BASIC:
+					if (!(enemy_tank->Hurt(1))) DeleteTank(enemy_tank);
 				}
+				DeleteFly(map[cell_x - 1][cell_y + i].fly);
+			}
 			if (map[cell_x - 1][cell_y + i].block->Getid() && enemy_tank->Getfacing() == LEFT)
 			{
 				switch (map[cell_x - 1][cell_y + i].block->Getid())
@@ -198,8 +187,8 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 		}
 		if (IsInMap(cell_x + 1, cell_y + i))
 		{
-			if (map[cell_x + 1][cell_y + i].fly!=list_fly_null.end())
-			if (map[cell_x + 1][cell_y + i].fly->IsAlive()
+			if (map[cell_x + 1][cell_y + i].fly != list_fly_null.end()
+				&& map[cell_x + 1][cell_y + i].fly->IsAlive()
 				&& map[cell_x + 1][cell_y + i].fly->Getfacing() == LEFT)
 			{
 				switch (map[cell_x + 1][cell_y + i].fly->Getid())
@@ -211,9 +200,7 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 				case WE_BASIC:
 					if (!(enemy_tank->Hurt(1))) DeleteTank(enemy_tank);
 				}
-				std::list<FLY>::iterator it = map[cell_x + 1][cell_y + i].fly;
-				map[cell_x + 1][cell_y + i].fly->ClearIterator(map[cell_x + 1][cell_y + i].fly);
-				list_fly.erase(it);
+				DeleteFly(map[cell_x + 1][cell_y + i].fly);
 			}
 			if (map[cell_x + 1][cell_y + i].block->Getid() && enemy_tank->Getfacing() == RIGHT)
 			{
@@ -239,8 +226,8 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 	for (i = 0; i < cell_ye - cell_y; i++) {
 		if (IsInMap(cell_x + i, cell_y - 1))
 		{
-			if(map[cell_x + i][cell_y - 1].fly != list_fly_null.end())
-			if (map[cell_x + i][cell_y - 1].fly->IsAlive()
+			if (map[cell_x + i][cell_y - 1].fly != list_fly_null.end()
+				&& map[cell_x + i][cell_y - 1].fly->IsAlive()
 				&& map[cell_x + i][cell_y - 1].fly->Getfacing() == DOWN)
 			{
 				switch (map[cell_x + i][cell_y - 1].fly->Getid())
@@ -252,9 +239,7 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 				case WE_BASIC:
 					if (!(enemy_tank->Hurt(1))) DeleteTank(enemy_tank);
 				}
-				std::list<FLY>::iterator it = map[cell_x + i][cell_y - 1].fly;
-				map[cell_x + i][cell_y - 1].fly->ClearIterator(map[cell_x + i][cell_y - 1].fly);
-				list_fly.erase(it);
+				DeleteFly(map[cell_x + i][cell_y - 1].fly);
 			}
 			if (map[cell_x + i][cell_y - 1].block->Getid() && enemy_tank->Getfacing() == UP)
 			{
@@ -278,8 +263,8 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 		}
 		if (IsInMap(cell_x + i, cell_y + 1))
 		{
-			if (map[cell_x + i][cell_y + 1].fly!=list_fly_null.end())
-			if (map[cell_x + i][cell_y + 1].fly->IsAlive()
+			if (map[cell_x + i][cell_y + 1].fly != list_fly_null.end()
+				&& map[cell_x + i][cell_y + 1].fly->IsAlive()
 				&& map[cell_x + i][cell_y + 1].fly->Getfacing() == UP)
 			{
 				switch (map[cell_x + i][cell_y + 1].fly->Getid())
@@ -291,9 +276,7 @@ void EnemyTankCrash(list<class TANK>::iterator enemy_tank) { //µĞ·½Ì¹¿ËÅöµ½×Óµ¯»
 				case WE_BASIC:
 					if (!(enemy_tank->Hurt(1))) DeleteTank(enemy_tank);
 				}
-				std::list<FLY>::iterator it = map[cell_x + i][cell_y + 1].fly;
-				map[cell_x + i][cell_y + 1].fly->ClearIterator(map[cell_x + i][cell_y + 1].fly);
-				list_fly.erase(it);
+				DeleteFly(map[cell_x + i][cell_y + 1].fly);
 			}
 			if (map[cell_x + i][cell_y + 1].block->Getid() && enemy_tank->Getfacing() == DOWN)
 			{
@@ -324,20 +307,15 @@ void BlockCrash(BLOCK* block) { //·½¿éÅöµ½×Óµ¯
 	for (i = 0; i < xe - x; i++) {
 		if (IsInMap(x - 1, y + i))
 		{
-			std::list<FLY>::iterator it;
 			if (map[x - 1][y + i].fly->IsAlive() && map[x - 1][y + i].fly->Getfacing() == RIGHT)
 				switch (block->Getid())
 				{
 				case B_BASEMENT:
-					it = map[x - 1][y + i].fly;
-					map[x - 1][y + i].fly->ClearIterator(map[x - 1][y + i].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x - 1][y + i].fly);
 					if (map[x - 1][y + i].fly->IsFromI()) Win();
 				case B_SHIELD: break;
 				case B_BEDROCK: 
-					it = map[x - 1][y + i].fly;
-					map[x - 1][y + i].fly->ClearIterator(map[x - 1][y + i].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x - 1][y + i].fly);
 					break;
 				case B_TNT: break;
 				case B_FIVE:
@@ -346,27 +324,20 @@ void BlockCrash(BLOCK* block) { //·½¿éÅöµ½×Óµ¯
 				case B_TWO:
 				case B_ONE:
 					block = &block_type[block->Getid() - 1];
-					it = map[x - 1][y + i].fly;
-					map[x - 1][y + i].fly->ClearIterator(map[x - 1][y + i].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x - 1][y + i].fly);
 				}
 		}
 		if (IsInMap(x + 1, y + i))
 		{
-			std::list<FLY>::iterator it;
 			if (map[x + 1][y + i].fly->IsAlive() && map[x + 1][y + i].fly->Getfacing() == LEFT)
 				switch (block->Getid())
 				{
 				case B_BASEMENT:
-					it = map[x + 1][y + i].fly;
-					map[x + 1][y + i].fly->ClearIterator(map[x + 1][y + i].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + 1][y + i].fly);
 					if (map[x + 1][y + i].fly->IsFromI()) Win();
 				case B_SHIELD: break;
 				case B_BEDROCK: 
-					it = map[x + 1][y + i].fly;
-					map[x + 1][y + i].fly->ClearIterator(map[x + 1][y + i].fly); 
-					list_fly.erase(it);
+					DeleteFly(map[x + 1][y + i].fly);
 					break;
 				case B_TNT: break;
 				case B_FIVE:
@@ -375,29 +346,22 @@ void BlockCrash(BLOCK* block) { //·½¿éÅöµ½×Óµ¯
 				case B_TWO:
 				case B_ONE:
 					block = &block_type[block->Getid() - 1];
-					it = map[x + 1][y + i].fly;
-					map[x + 1][y + i].fly->ClearIterator(map[x + 1][y + i].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + 1][y + i].fly);
 				}
 		}
 	}
 	for (i = 0; i < ye - y; i++) {
 		if (IsInMap(x + i, y - 1))
 		{
-			std::list<FLY>::iterator it;
 			if (map[x + i][y - 1].fly->IsAlive() && map[x + i][y - 1].fly->Getfacing() == DOWN)
 				switch (block->Getid())
 				{
 				case B_BASEMENT:
-					it = map[x + i][y - 1].fly;
-					map[x + i][y - 1].fly->ClearIterator(map[x + i][y - 1].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + i][y - 1].fly);
 					if (map[x + i][y - 1].fly->IsFromI()) Win();
 				case B_SHIELD: break;
 				case B_BEDROCK: 
-					it = map[x + i][y - 1].fly;
-					map[x + i][y - 1].fly->ClearIterator(map[x + i][y - 1].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + i][y - 1].fly);
 					break;
 				case B_TNT: break;
 				case B_FIVE:
@@ -406,25 +370,20 @@ void BlockCrash(BLOCK* block) { //·½¿éÅöµ½×Óµ¯
 				case B_TWO:
 				case B_ONE:
 					block = &block_type[block->Getid() - 1];
-					it = map[x + i][y - 1].fly;
-					map[x + i][y - 1].fly->ClearIterator(map[x + i][y - 1].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + i][y - 1].fly);
 				}
 		}
 		if (IsInMap(x + i, y + 1))
 		{
-			std::list<FLY>::iterator it;
 			if (map[x + i][y + 1].fly->IsAlive() && map[x + i][y + 1].fly->Getfacing() == UP)
 				switch (block->Getid())
 				{
 				case B_BASEMENT:
-					 it = map[x + i][y + 1].fly;
-					map[x + i][y + 1].fly->ClearIterator(map[x + i][y + 1].fly);
+					DeleteFly(map[x + i][y + 1].fly);
 					if (map[x + i][y + 1].fly->IsFromI()) Win();
 				case B_SHIELD: break;
 				case B_BEDROCK: 
-					it = map[x + i][y + 1].fly;
-					map[x + i][y + 1].fly->ClearIterator(map[x + i][y + 1].fly); break;
+					DeleteFly(map[x + i][y + 1].fly);
 				case B_TNT: break;
 				case B_FIVE:
 				case B_FOUR:
@@ -432,9 +391,7 @@ void BlockCrash(BLOCK* block) { //·½¿éÅöµ½×Óµ¯
 				case B_TWO:
 				case B_ONE:
 					block = &block_type[block->Getid() - 1];
-					it = map[x + i][y + 1].fly;
-					map[x + i][y + 1].fly->ClearIterator(map[x + i][y + 1].fly);
-					list_fly.erase(it);
+					DeleteFly(map[x + i][y + 1].fly);
 				}
 		}
 	}
