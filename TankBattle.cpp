@@ -24,12 +24,15 @@ extern std::list<class TANK>	list_tank_null;
 extern std::list<class ENTITY>	list_entity_null;
 extern std::list<class FLY>		list_fly_null;
 
+const int ENEMY_FLASH_TIME = 100;
+
 static struct DATA
 {
 	int score = 0;
 	int num_enemy = 0;
 	int num_entity = 0;
 	int num_destroyed_basement = 0;
+	int enemy_flash = 0;
 }total_data;
 
 void Print();
@@ -135,12 +138,13 @@ void Begin()
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 5) * BLOCK_SIZE, _T("空格开火"));
 	outtextxy((WIN_COL + 1) * BLOCK_SIZE, (WIN_ROW / 4 + 6) * BLOCK_SIZE, _T("F2暂停"));
 
-	list_tank.push_back(TANK(0, 30 * BLOCK_SIZE, 40 * BLOCK_SIZE, UP));
+	/*list_tank.push_back(TANK(0, 30 * BLOCK_SIZE, 40 * BLOCK_SIZE, UP));
 	std::list<class TANK>::iterator me = list_tank.begin();
 	me++;
-	me->ChangeWeapon(WE_LASER);
+	me->ChangeWeapon(WE_LASER);*/
 	scr_y = (MAX_MAP - 3) * BLOCK_SIZE + BLOCK_SIZE / 2;
 	scr_x = (MAX_MAP / 2) * BLOCK_SIZE + BLOCK_SIZE / 2;
+	list_tank.push_back(TANK(0,(MAX_MAP / 2 - 1)  * BLOCK_SIZE,(MAX_MAP - 4)  * BLOCK_SIZE, UP));
 	Print();
 }
 
@@ -210,7 +214,8 @@ bool DataChange(list<class TANK>::iterator me)
 		for (; it != list_tank.end(); it++)
 		{
 			it->Move(it);
-			it->Turning(rand() % 4);
+			if(rand()%5==0)
+				it->Turning(rand() % 4);
 			it->Flash();
 		}
 	}
@@ -252,49 +257,49 @@ void Print()
 
 void GenerateRandomMap()
 {
-	for (int i = 0; i < MAX_MAP; i++)
-	{
-		map[i][0].block = &block_type[B_BEDROCK];
-		map[i][MAX_MAP - 1].block = &block_type[B_BEDROCK];
-		map[MAX_MAP - 1][i].block = &block_type[B_BEDROCK];
-		map[0][i].block = &block_type[B_BEDROCK];
-	}
+	//for (int i = 0; i < MAX_MAP; i++)
+	//{
+	//	map[i][0].block = &block_type[B_BEDROCK];
+	//	map[i][MAX_MAP - 1].block = &block_type[B_BEDROCK];
+	//	map[MAX_MAP - 1][i].block = &block_type[B_BEDROCK];
+	//	map[0][i].block = &block_type[B_BEDROCK];
+	//}
 
-	for (int i = 1; i < MAX_MAP - 1; i++)
-		for (int j = 1; j < MAX_MAP - 1; j++)
-		{
-			if (IsBase(i, j)) { map[i][j].block = &block_type[B_BASEMENT]; continue; }
-			int a = rand() % 40, b = 0;
-			switch (a)
-			{
-				/*case 8:
-				case 9:
-					b = 1; break;
-				case 10:
-				case 11:
-					b = 2; break;
-				case 12:
-				case 13:
-					b = 3; break;
-				case 14:
-					b = 4; break;
-				case 15:b = 5; break;
-				case 16:
-					b = 6; break;
-				case 17:
-				case 18:
-					b = 7; break;
-				case 19:
-					b = 8; break;*/
-			default:
-				b = 0;
-			}
-			map[i][j].block = &block_type[b];
-			map[i][j].entity = list_entity_null.end();
-			map[i][j].fly = list_fly_null.end();
-			map[i][j].tank = list_tank_null.end();
-			//map[i][j] = map[i][j] & MASK_BLOCK ^ block_type[b].id;
-		}
+	//for (int i = 1; i < MAX_MAP - 1; i++)
+	//	for (int j = 1; j < MAX_MAP - 1; j++)
+	//	{
+	//		if (IsBase(i, j)) { map[i][j].block = &block_type[B_BASEMENT]; continue; }
+	//		int a = rand() % 40, b = 0;
+	//		switch (a)
+	//		{
+	//			/*case 8:
+	//			case 9:
+	//				b = 1; break;
+	//			case 10:
+	//			case 11:
+	//				b = 2; break;
+	//			case 12:
+	//			case 13:
+	//				b = 3; break;
+	//			case 14:
+	//				b = 4; break;
+	//			case 15:b = 5; break;
+	//			case 16:
+	//				b = 6; break;
+	//			case 17:
+	//			case 18:
+	//				b = 7; break;
+	//			case 19:
+	//				b = 8; break;*/
+	//		default:
+	//			b = 0;
+	//		}
+	//		map[i][j].block = &block_type[b];
+	//		map[i][j].entity = list_entity_null.end();
+	//		map[i][j].fly = list_fly_null.end();
+	//		map[i][j].tank = list_tank_null.end();
+	//		//map[i][j] = map[i][j] & MASK_BLOCK ^ block_type[b].id;
+	//	}
 	LoadMap("resources\\levels\\level1.txt");
 }
 
@@ -308,7 +313,10 @@ bool IsBase(int i, int j)
 
 void GenerateEnemy()
 {
-	if (total_data.num_enemy <= MAX_ENEMY)
+	total_data.enemy_flash++;
+	total_data.enemy_flash%=ENEMY_FLASH_TIME;
+
+	if (!total_data.enemy_flash && total_data.num_enemy <= MAX_ENEMY)
 	{
 		int tx = rand() % WIN_COL;
 		int ty = rand() % WIN_ROW;
@@ -317,7 +325,7 @@ void GenerateEnemy()
 		tx += scr_x / BLOCK_SIZE;
 		ty += scr_y / BLOCK_SIZE;
 		for (int i = tx; i <= tx + 2; i++)
-			for (int j = ty; i <= ty + 2; j++)
+			for (int j = ty; j <= ty + 2; j++)
 				if (!IsInMap(i, j)) return;
 				else if (!map[i][j].block->IsPassable()) return;
 		list_tank.push_back(TANK(1, tx * BLOCK_SIZE, ty * BLOCK_SIZE, UP));

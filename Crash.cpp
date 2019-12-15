@@ -2,8 +2,8 @@
 using namespace std;
 
 void ITankCrash(list<class TANK>::iterator i_tank) { //我的坦克碰到子弹或方块
-	int cell_x = i_tank->Getx() / BLOCK_SIZE, cell_y = i_tank->Gety() / BLOCK_SIZE;
-	int cell_xe = i_tank->GetxEnd() / BLOCK_SIZE, cell_ye = i_tank->GetyEnd() / BLOCK_SIZE;
+	int cell_x = i_tank-> Getx() / BLOCK_SIZE, cell_y = i_tank->Gety() / BLOCK_SIZE;
+	int cell_xe = i_tank-> GetxEnd() / BLOCK_SIZE, cell_ye = i_tank->GetyEnd() / BLOCK_SIZE;
 	int i;
 	for (i = 0; i < cell_xe - cell_x; i++) {
 		if (IsInMap(cell_x - 1, cell_y + i))
